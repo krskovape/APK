@@ -97,7 +97,11 @@ class Ui_MainForm(object):
         self.actionPointInPolygon.setText(_translate("MainForm", "PointInPolygon"))
 
     def openFile(self):
-        self.Canvas.loadFile()
+        width = self.Canvas.frameSize().width()
+        height = self.Canvas.frameSize().height()
+        #height = 555
+        self.Canvas.loadFile(width, height)
+
 
 
 if __name__ == "__main__":

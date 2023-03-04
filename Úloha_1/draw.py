@@ -2,6 +2,7 @@ from PyQt6.QtCore import *
 from PyQt6.QtGui import *
 from PyQt6.QtWidgets import *
 import shapefile
+from math import inf
 
 class Draw(QWidget):
 
@@ -13,22 +14,40 @@ class Draw(QWidget):
         self.__pol = QPolygonF()
         self.__polygons = []
 
-        self.__add_vertex = True
+        self.__draw_point = True
 
-    def loadFile(self):
+    def loadFile(self, width, height):
         filename = QFileDialog.getOpenFileName(self, "Open file", "", "Shapefile (*.shp)")
         path = filename[0]
 
         shapef = shapefile.Reader(path)
         features = shapef.shapes()
 
+        minc_x = inf
+        minc_y = inf
+        maxc_x = -inf
+        maxc_y = -inf
+        for f in features:
+            min_x = min(f.points)[0]
+            min_y = min(f.points)[1]
+            max_x = max(f.points)[0]
+            max_y = max(f.points)[1]
+            if min_x < minc_x:
+                minc_x = min_x
+            if min_y < minc_y:
+                minc_y = min_y
+            if max_x > maxc_x:
+                maxc_x = max_x
+            if max_y > maxc_y:
+                maxc_y = max_y
+
         self.__polygons = [None] * len(shapef)
 
         for k in range(len(shapef)):
             self.__polygons[k] = QPolygonF()
             for point in features[k].points:
-                x = point[0]
-                y = point[1]
+                x = int(round((point[0]-minc_x)/(maxc_x-minc_x)*width))
+                y = int(round(height - (point[1]-minc_y)/(maxc_y-minc_y)*height))
                 p = QPointF(x,y)
                 self.__polygons[k].append(p)
         return self.__polygons
@@ -41,12 +60,7 @@ class Draw(QWidget):
         y = e.position().y()
 
         # add point to polygon
-        if self.__add_vertex == True:
-            # create point, add point to polygon
-            p = QPointF(x,y)
-            self.__pol.append(p)
-        # set x,y to point
-        else:
+        if self.__draw_point == True:
             self.__q.setX(x)
             self.__q.setY(y)
 
@@ -68,6 +82,10 @@ class Draw(QWidget):
         # draw polygon
         for polygon in self.__polygons:
             qp.drawPolygon(polygon)
+
+        # set attributes for point
+        qp.setPen(Qt.GlobalColor.red)
+        qp.setBrush(Qt.GlobalColor.red)
 
         # draw point - zkusit místo toho drawPoint?
         d = 10
