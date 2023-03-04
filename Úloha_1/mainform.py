@@ -102,15 +102,10 @@ class Ui_MainForm(object):
         # analyze position
         a = Algorithms()
 
-        self.Canvas.__pol_index = [None] * len(polygons)
-
         for index, pol in enumerate(polygons):
-            #if self.comboBox.currentIndex() == 1:
-                #result = a.RayCrossing(q, pol)
-                #self.Canvas.__polygon_index[index] = result
-            result = a.RayCrossing(q, pol)
-            #self.Canvas.__pol_index[index] = result
-            self.Canvas.__pol_index.append(result)
+            if self.comboBox.currentIndex() == 1:
+                result = a.RayCrossing(q, pol)
+                self.Canvas.setResult(result)
 
         self.Canvas.repaint()
 

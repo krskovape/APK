@@ -77,16 +77,16 @@ class Draw(QWidget):
         # draw polygon
         for index, polygon in enumerate(self.__polygons):
             # set attributes
-            qp.setPen(Qt.GlobalColor.darkGreen)
-            qp.setBrush(Qt.GlobalColor.yellow)
+            qp.setPen(QColor.fromString("steelblue"))
+            qp.setBrush(QColor.fromString("powderblue"))
 
             if self.__pol_index and (self.__pol_index[index] == 1):
-                qp.setPen(Qt.GlobalColor.magenta)
-                qp.setBrush(Qt.GlobalColor.magenta)
+                qp.setPen(QColor.fromString("green"))
+                qp.setBrush(QColor.fromString("yellowgreen"))
 
             qp.drawPolygon(polygon)
 
-        #self.__pol_index = []
+        self.__pol_index = []
 
         # set attributes for point
         qp.setPen(Qt.GlobalColor.red)
@@ -99,9 +99,9 @@ class Draw(QWidget):
         # end draw
         qp.end()
 
-    def switchSource(self):
-        # move point or add vertex (negace přes not)
-        self.__add_vertex = not(self.__add_vertex)
+    # append result to list
+    def setResult(self, result):
+        self.__pol_index.append(result)
 
     # get point
     def getPoint(self):
