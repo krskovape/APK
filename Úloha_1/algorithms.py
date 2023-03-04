@@ -6,7 +6,7 @@ class Algorithms:
     def __init__(self):
         pass
 
-    def getPointPolygonPosition(self, q, pol):
+    def RayCrossing(self, q, pol):
         # počet průsečíků (k), number of vertices (n)
         k = 0
         n = len(pol)
@@ -31,5 +31,5 @@ class Algorithms:
 
         # point is inside
         if k % 2 == 1:
-            return True
-        return False
+            return 1
+        return 0

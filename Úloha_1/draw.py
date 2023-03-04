@@ -11,8 +11,8 @@ class Draw(QWidget):
 
         # query point and polygon - F for float numbers
         self.__q = QPointF(-10,-10)
-        self.__pol = QPolygonF()
         self.__polygons = []
+        self.__pol_index = []
 
         self.__draw_point = True
 
@@ -50,7 +50,6 @@ class Draw(QWidget):
                 y = int(round(height - (point[1]-minc_y)/(maxc_y-minc_y)*height))
                 p = QPointF(x,y)
                 self.__polygons[k].append(p)
-        return self.__polygons
 
 
     # left mouse button click
@@ -75,13 +74,19 @@ class Draw(QWidget):
         # start draw
         qp.begin(self)
 
-        # set attributes
-        qp.setPen(Qt.GlobalColor.darkGreen)
-        qp.setBrush(Qt.GlobalColor.yellow)
-
         # draw polygon
-        for polygon in self.__polygons:
+        for index, polygon in enumerate(self.__polygons):
+            # set attributes
+            qp.setPen(Qt.GlobalColor.darkGreen)
+            qp.setBrush(Qt.GlobalColor.yellow)
+
+            if self.__pol_index and (self.__pol_index[index] == 1):
+                qp.setPen(Qt.GlobalColor.magenta)
+                qp.setBrush(Qt.GlobalColor.magenta)
+
             qp.drawPolygon(polygon)
+
+        #self.__pol_index = []
 
         # set attributes for point
         qp.setPen(Qt.GlobalColor.red)
@@ -103,5 +108,5 @@ class Draw(QWidget):
         return self.__q
 
     # get polygon
-    def getPolygon(self):
-        return self.__pol
+    def getPolygons(self):
+        return self.__polygons
