@@ -103,6 +103,9 @@ class Ui_MainForm(object):
         a = Algorithms()
 
         for index, pol in enumerate(polygons):
+            if self.comboBox.currentIndex() == 0:
+                result = a.windingNumber(q, pol)
+                self.Canvas.setResult(result)
             if self.comboBox.currentIndex() == 1:
                 result = a.RayCrossing(q, pol)
                 self.Canvas.setResult(result)
