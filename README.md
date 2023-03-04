@@ -1,2 +1,2 @@
 # APK
-Algoritmy počítačové kartografie
+Úlohy z předmětu Algoritmy počítačové kartografie
