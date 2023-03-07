@@ -101,14 +101,14 @@ class Ui_MainForm(object):
         self.menuBar.addAction(self.menuEdit.menuAction())
 
         self.actionOpen.triggered.connect(self.openFile)
-        #self.actionExit.triggered.connect()
+        self.actionExit.triggered.connect(sys.exit)
         self.actionPointInPolygon.triggered.connect(self.analyze)
-        #self.actionFitToDisplay.triggered.connect()
+        self.actionFitToDisplay.triggered.connect(self.fitToDisplay)
         self.actionClear.triggered.connect(self.clearCanvas)
         self.buttonInputFile.clicked.connect(self.openFile)
         self.buttonAnalyze.clicked.connect(self.analyze)
         self.buttonClear.clicked.connect(self.clearCanvas)
-        #self.buttonRepaint.clicked.connect()
+        self.buttonRepaint.clicked.connect(self.fitToDisplay)
 
         self.retranslateUi(MainForm)
         QtCore.QMetaObject.connectSlotsByName(MainForm)
@@ -131,7 +131,8 @@ class Ui_MainForm(object):
     def openFile(self):
         width = self.Canvas.frameSize().width()
         height = self.Canvas.frameSize().height()
-        self.Canvas.loadFile(width, height)
+        self.Canvas.loadData()
+        self.Canvas.rescaleData(width, height)
 
     def analyze(self):
         q = self.Canvas.getPoint()
@@ -152,6 +153,12 @@ class Ui_MainForm(object):
 
     def clearCanvas(self):
         self.Canvas.clearPol()
+
+    def fitToDisplay(self):
+        width = self.Canvas.frameSize().width()
+        height = self.Canvas.frameSize().height()
+        self.Canvas.rescaleData(width, height)
+        self.Canvas.repaint()
 
 
 if __name__ == "__main__":

@@ -13,42 +13,46 @@ class Draw(QWidget):
         self.__q = QPointF(-10,-10)
         self.__polygons = []
         self.__pol_res = []
+        self.__features = None
+        self.__min_max = []
 
     # function for loading file
-    def loadFile(self, width, height):
+    def loadData(self):
         # get path to file via Dialog window
         filename = QFileDialog.getOpenFileName(self, "Open file", "", "Shapefile (*.shp)")
         path = filename[0]
 
         # return previous polygons if dialog window is closed
         if bool(filename[0]) == False:
-            return self.__polygons
+           return self.__polygons
 
         # load objects from shapefile
         shp = shapefile.Reader(path)
-        features = shp.shapes()
+        self.__features = shp.shapes()
 
         # find minimum and maximum of the coordinates
         x_lst = []
         y_lst = []
         for k in range(len(shp)):
-            for point in features[k].points:
+            for point in self.__features[k].points:
                 x_lst.append(point[0])
                 y_lst.append(point[1])
         maxc_x = max(x_lst)
         maxc_y = max(y_lst)
         minc_x = min(x_lst)
         minc_y = min(y_lst)
+        self.__min_max = [min(x_lst), min(y_lst), max(x_lst), max(y_lst)]
 
+    def rescaleData(self, width, height):
         # initialize list for storing polygons
-        self.__polygons = [None] * len(shp)
+        self.__polygons = [None] * len(self.__features)
 
         # rescale data and create polygons
-        for k in range(len(shp)):
+        for k in range(len(self.__features)):
             self.__polygons[k] = QPolygonF()
-            for point in features[k].points:
-                x = int(((point[0]-minc_x)/(maxc_x-minc_x)*width))
-                y = int((height - (point[1]-minc_y)/(maxc_y-minc_y)*(height)))
+            for point in self.__features[k].points:
+                x = int(((point[0] - self.__min_max[0])/(self.__min_max[2] - self.__min_max[0])*width))
+                y = int((height - (point[1] - self.__min_max[1])/(self.__min_max[3] - self.__min_max[1])*(height)))
                 p = QPointF(x,y)
                 self.__polygons[k].append(p)
 
