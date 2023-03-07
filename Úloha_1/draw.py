@@ -20,14 +20,18 @@ class Draw(QWidget):
         filename = QFileDialog.getOpenFileName(self, "Open file", "", "Shapefile (*.shp)")
         path = filename[0]
 
+        # return previous polygons if dialog window is closed
+        if bool(filename[0]) == False:
+            return self.__polygons
+
         # load objects from shapefile
-        shapef = shapefile.Reader(path)
-        features = shapef.shapes()
+        shp = shapefile.Reader(path)
+        features = shp.shapes()
 
         # find minimum and maximum of the coordinates
         x_lst = []
         y_lst = []
-        for k in range(len(shapef)):
+        for k in range(len(shp)):
             for point in features[k].points:
                 x_lst.append(point[0])
                 y_lst.append(point[1])
@@ -37,10 +41,10 @@ class Draw(QWidget):
         minc_y = min(y_lst)
 
         # initialize list for storing polygons
-        self.__polygons = [None] * len(shapef)
+        self.__polygons = [None] * len(shp)
 
         # rescale data and create polygons
-        for k in range(len(shapef)):
+        for k in range(len(shp)):
             self.__polygons[k] = QPolygonF()
             for point in features[k].points:
                 x = int(((point[0]-minc_x)/(maxc_x-minc_x)*width))
@@ -98,6 +102,13 @@ class Draw(QWidget):
     # append result to list
     def setResult(self, result):
         self.__pol_res.append(result)
+
+    # clear all polygons
+    def clearPol(self):
+        self.__polygons = []
+        self.__q.setX(-10)
+        self.__q.setY(-10)
+        self.repaint()
 
     # get point
     def getPoint(self):

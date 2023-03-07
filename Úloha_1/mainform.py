@@ -19,10 +19,10 @@ class Ui_MainForm(object):
         self.Toolbar.setMaximumSize(QtCore.QSize(16777215, 30))
         self.Toolbar.setObjectName("Toolbar")
         self.label = QtWidgets.QLabel(parent=self.Toolbar)
-        self.label.setGeometry(QtCore.QRect(260, 5, 81, 20))
+        self.label.setGeometry(QtCore.QRect(220, 5, 71, 20))
         self.label.setObjectName("label")
         self.comboBox = QtWidgets.QComboBox(parent=self.Toolbar)
-        self.comboBox.setGeometry(QtCore.QRect(340, 0, 150, 30))
+        self.comboBox.setGeometry(QtCore.QRect(290, 0, 120, 30))
         self.comboBox.setLayoutDirection(QtCore.Qt.LayoutDirection.LeftToRight)
         self.comboBox.setObjectName("comboBox")
         self.comboBox.addItem("")
@@ -33,22 +33,17 @@ class Ui_MainForm(object):
         self.buttonInputFile.setText("")
         self.buttonInputFile.setObjectName("buttonInputFile")
         self.buttonAnalyze = QtWidgets.QPushButton(parent=self.Toolbar)
-        self.buttonAnalyze.setGeometry(QtCore.QRect(90, 0, 30, 30))
+        self.buttonAnalyze.setGeometry(QtCore.QRect(45, 0, 30, 30))
         self.buttonAnalyze.setStyleSheet("border-image: url(icons/polygon.png);")
         self.buttonAnalyze.setText("")
         self.buttonAnalyze.setObjectName("buttonAnalyze")
         self.buttonClear = QtWidgets.QPushButton(parent=self.Toolbar)
-        self.buttonClear.setGeometry(QtCore.QRect(135, 0, 30, 30))
+        self.buttonClear.setGeometry(QtCore.QRect(90, 0, 30, 30))
         self.buttonClear.setStyleSheet("border-image: url(icons/clear.png);")
         self.buttonClear.setText("")
         self.buttonClear.setObjectName("buttonClear")
-        self.buttonExit = QtWidgets.QPushButton(parent=self.Toolbar)
-        self.buttonExit.setGeometry(QtCore.QRect(45, 0, 30, 30))
-        self.buttonExit.setStyleSheet("border-image: url(icons/exit.png);")
-        self.buttonExit.setText("")
-        self.buttonExit.setObjectName("buttonExit")
         self.buttonRepaint = QtWidgets.QPushButton(parent=self.Toolbar)
-        self.buttonRepaint.setGeometry(QtCore.QRect(180, 0, 30, 30))
+        self.buttonRepaint.setGeometry(QtCore.QRect(135, 0, 30, 30))
         self.buttonRepaint.setText("")
         self.buttonRepaint.setObjectName("buttonRepaint")
         self.verticalLayout.addWidget(self.Toolbar)
@@ -105,16 +100,22 @@ class Ui_MainForm(object):
         self.menuBar.addAction(self.menuAnalyze.menuAction())
         self.menuBar.addAction(self.menuEdit.menuAction())
 
+        self.actionOpen.triggered.connect(self.openFile)
+        #self.actionExit.triggered.connect()
+        self.actionPointInPolygon.triggered.connect(self.analyze)
+        #self.actionFitToDisplay.triggered.connect()
+        self.actionClear.triggered.connect(self.clearCanvas)
         self.buttonInputFile.clicked.connect(self.openFile)
         self.buttonAnalyze.clicked.connect(self.analyze)
-        self.actionPointInPolygon.triggered.connect(self.analyze)
+        self.buttonClear.clicked.connect(self.clearCanvas)
+        #self.buttonRepaint.clicked.connect()
 
         self.retranslateUi(MainForm)
         QtCore.QMetaObject.connectSlotsByName(MainForm)
 
     def retranslateUi(self, MainForm):
         _translate = QtCore.QCoreApplication.translate
-        MainForm.setWindowTitle(_translate("MainForm", "Point in polygon location"))
+        MainForm.setWindowTitle(_translate("MainForm", "Point and polygon location"))
         self.label.setText(_translate("MainForm", "Algorithm:"))
         self.comboBox.setItemText(0, _translate("MainForm", "Winding Number"))
         self.comboBox.setItemText(1, _translate("MainForm", "Ray Crossing"))
@@ -122,16 +123,14 @@ class Ui_MainForm(object):
         self.menuAnalyze.setTitle(_translate("MainForm", "Analyze"))
         self.menuEdit.setTitle(_translate("MainForm", "Edit"))
         self.actionOpen.setText(_translate("MainForm", "Open"))
-        self.actionPointInPolygon.setText(_translate("MainForm", "PointInPolygon"))
-        self.actionFitToDisplay.setText(_translate("MainForm", "FitToDisplay"))
+        self.actionPointInPolygon.setText(_translate("MainForm", "Point In Polygon"))
+        self.actionFitToDisplay.setText(_translate("MainForm", "Fit To Display"))
         self.actionClear.setText(_translate("MainForm", "Clear"))
         self.actionExit.setText(_translate("MainForm", "Exit"))
 
     def openFile(self):
-        #self.Canvas.setContentsMargins(160,30,160,100)
         width = self.Canvas.frameSize().width()
         height = self.Canvas.frameSize().height()
-        print(width, height)
         self.Canvas.loadFile(width, height)
 
     def analyze(self):
@@ -150,6 +149,10 @@ class Ui_MainForm(object):
                 self.Canvas.setResult(result)
 
         self.Canvas.repaint()
+
+    def clearCanvas(self):
+        self.Canvas.clearPol()
+
 
 if __name__ == "__main__":
     import sys
