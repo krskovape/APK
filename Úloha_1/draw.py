@@ -9,48 +9,44 @@ class Draw(QWidget):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        # query point and polygon - F for float numbers
+        # query point, lists for storing polygons and their results of analysis
         self.__q = QPointF(-10,-10)
         self.__polygons = []
-        self.__pol_index = []
+        self.__pol_res = []
 
-        self.__draw_point = True
-
+    # function for loading file
     def loadFile(self, width, height):
+        # get path to file via Dialog window
         filename = QFileDialog.getOpenFileName(self, "Open file", "", "Shapefile (*.shp)")
         path = filename[0]
 
+        # load objects from shapefile
         shapef = shapefile.Reader(path)
         features = shapef.shapes()
 
-        minc_x = inf
-        minc_y = inf
-        maxc_x = -inf
-        maxc_y = -inf
-        for f in features:
-            min_x = min(f.points)[0]
-            min_y = min(f.points)[1]
-            max_x = max(f.points)[0]
-            max_y = max(f.points)[1]
-            if min_x < minc_x:
-                minc_x = min_x
-            if min_y < minc_y:
-                minc_y = min_y
-            if max_x > maxc_x:
-                maxc_x = max_x
-            if max_y > maxc_y:
-                maxc_y = max_y
+        # find minimum and maximum of the coordinates
+        x_lst = []
+        y_lst = []
+        for k in range(len(shapef)):
+            for point in features[k].points:
+                x_lst.append(point[0])
+                y_lst.append(point[1])
+        maxc_x = max(x_lst)
+        maxc_y = max(y_lst)
+        minc_x = min(x_lst)
+        minc_y = min(y_lst)
 
+        # initialize list for storing polygons
         self.__polygons = [None] * len(shapef)
 
+        # rescale data and create polygons
         for k in range(len(shapef)):
             self.__polygons[k] = QPolygonF()
             for point in features[k].points:
-                x = int(round((point[0]-minc_x)/(maxc_x-minc_x)*width))
-                y = int(round(height - (point[1]-minc_y)/(maxc_y-minc_y)*height))
+                x = int(((point[0]-minc_x)/(maxc_x-minc_x)*width))
+                y = int((height - (point[1]-minc_y)/(maxc_y-minc_y)*(height)))
                 p = QPointF(x,y)
                 self.__polygons[k].append(p)
-
 
     # left mouse button click
     def mousePressEvent(self, e:QMouseEvent):
@@ -59,9 +55,8 @@ class Draw(QWidget):
         y = e.position().y()
 
         # add point to polygon
-        if self.__draw_point == True:
-            self.__q.setX(x)
-            self.__q.setY(y)
+        self.__q.setX(x)
+        self.__q.setY(y)
 
         # repaint screen
         self.repaint()
@@ -80,20 +75,21 @@ class Draw(QWidget):
             qp.setPen(QColor.fromString("steelblue"))
             qp.setBrush(QColor.fromString("powderblue"))
 
-            if self.__pol_index and (self.__pol_index[index] == 1):
+            # set diferent color for polygons containing point
+            if self.__pol_res and (self.__pol_res[index] == 1) or self.__pol_res and (self.__pol_res[index] == -1):
                 qp.setPen(QColor.fromString("green"))
                 qp.setBrush(QColor.fromString("yellowgreen"))
 
             qp.drawPolygon(polygon)
 
-        self.__pol_index = []
+        self.__pol_res = []
 
         # set attributes for point
         qp.setPen(Qt.GlobalColor.red)
         qp.setBrush(Qt.GlobalColor.red)
 
-        # draw point - zkusit místo toho drawPoint?
-        d = 10
+        # draw point
+        d = 8
         qp.drawEllipse(int(self.__q.x() - d/2), int(self.__q.y() - d/2), d, d)
 
         # end draw
@@ -101,7 +97,7 @@ class Draw(QWidget):
 
     # append result to list
     def setResult(self, result):
-        self.__pol_index.append(result)
+        self.__pol_res.append(result)
 
     # get point
     def getPoint(self):
