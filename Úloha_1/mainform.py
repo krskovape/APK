@@ -146,7 +146,7 @@ class Ui_MainForm(object):
                 result = a.windingNumber(q, pol)
                 self.Canvas.setResult(result)
             if self.comboBox.currentIndex() == 1:
-                result = a.RayCrossing(q, pol)
+                result = a.rayCrossing(q, pol)
                 self.Canvas.setResult(result)
 
         self.Canvas.repaint()

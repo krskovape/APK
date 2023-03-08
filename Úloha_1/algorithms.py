@@ -45,10 +45,18 @@ class Algorithms:
 
         # point lies on the edge
         if norm_v1 == 0 or norm_v2 == 0:
-            return -1
+            return abs(acos(1))
 
-        # compute angle
-        return acos(v1v2 / (norm_v1 * norm_v2))
+        # round down to 1 if greater
+        if v1v2 / (norm_v1 * norm_v2) > 1:
+            return abs(acos(1))
+
+        # round up to -1 if smaller
+        elif v1v2 / (norm_v1 * norm_v2) < -1:
+            return abs(acos(-1))
+
+        # return angle
+        return abs(acos(v1v2 / (norm_v1 * norm_v2)))
 
     def windingNumber(self, q, pol):
         # initialize sum of omega and tolerance
@@ -71,13 +79,24 @@ class Algorithms:
             if pos == 0:
                 omega_sum -= omega
 
+            # colinear point
+            else:
+                # try if point lies between the nodes
+                if (pol[i].x() - q.x()) * (pol[i+1].x() - q.x()) <= 0 and (pol[i].y() - q.y()) * (pol[i+1].y() - q.y()) <= 0:
+                    # point lies on the edge
+                    return -1
+
+        # point is inside
         if abs(abs(omega_sum) - 2*pi) < epsilon:
             return 1
-        else: return 0
 
-    def RayCrossing(self, q, pol):
-        # počet průsečíků (k), number of vertices (n)
-        k = 0
+        # point is outside
+        return 0
+
+    def rayCrossing(self, q, pol):
+        # initialize number of intersections and number of vertices
+        kl = 0
+        kr = 0
         n = len(pol)
 
         # process all vertices
@@ -85,20 +104,43 @@ class Algorithms:
             # reduce coordinates
             xir = pol[i].x() - q.x()
             yir = pol[i].y() - q.y()
-            # modulo (%n), abychom nepřekročili index, poslední bod bude zase ten první
-            xi1r = pol[(i+1)%n].x() - q.x()
-            yi1r = pol[(i+1)%n].y() - q.y()
+            xi1r = pol[(i + 1) % n].x() - q.x()
+            yi1r = pol[(i + 1) % n].y() - q.y()
 
-            # suitable segment - protnutý horizontálním paprskem, oba konce v jiných polorovinách nebo...
-            if yi1r > 0 and yir <= 0 or yir > 0 and yi1r <= 0:
+            # check if the coordinates of the point and the vertex are same
+            if xir == 0 and yir == 0:
+                # point lies on the vertex
+                return -1
+
+            # check for the horizontal edge
+            if (yi1r - yir) == 0:
+                continue
+
+            # lower segment
+            if (yi1r < 0) != (yir < 0):
+                # compute intersection
+                xm = (xi1r * yir - xir * yi1r) / (yi1r - yir)
+
+                # increment amount of intersections
+                if xm < 0:
+                    kl += 1
+
+            # upper segment
+            if (yi1r > 0) != (yir > 0):
                 # compute intersection
                 xm = (xi1r * yir - xir * yi1r) / (yi1r - yir)
 
                 # increment amount of intersections
                 if xm > 0:
-                    k += 1
+                    kr += 1
+
+        # point is on the edge
+        if (kl % 2) != (kr % 2):
+            return -1
 
         # point is inside
-        if k % 2 == 1:
+        if kr % 2 == 1:
             return 1
+
+        # point is outside
         return 0

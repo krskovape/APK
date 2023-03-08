@@ -37,10 +37,6 @@ class Draw(QWidget):
             for point in self.__features[k].points:
                 x_lst.append(point[0])
                 y_lst.append(point[1])
-        maxc_x = max(x_lst)
-        maxc_y = max(y_lst)
-        minc_x = min(x_lst)
-        minc_y = min(y_lst)
         self.__min_max = [min(x_lst), min(y_lst), max(x_lst), max(y_lst)]
 
     def rescaleData(self, width, height):
@@ -84,9 +80,13 @@ class Draw(QWidget):
             qp.setBrush(QColor.fromString("powderblue"))
 
             # set diferent color for polygons containing point
-            if self.__pol_res and (self.__pol_res[index] == 1) or self.__pol_res and (self.__pol_res[index] == -1):
+            if self.__pol_res and (self.__pol_res[index] == 1): #or self.__pol_res and (self.__pol_res[index] == -1):
                 qp.setPen(QColor.fromString("green"))
                 qp.setBrush(QColor.fromString("yellowgreen"))
+
+            if self.__pol_res and (self.__pol_res[index] == -1):
+                qp.setPen(QColor.fromString("purple"))
+                qp.setBrush(QColor.fromString("palevioletred"))
 
             qp.drawPolygon(polygon)
 
