@@ -65,6 +65,11 @@ class Algorithms:
 
         # loop through polygon
         for i in range(len(pol)-1):
+            # check if the coordinates of the point and the vertex are same
+            if pol[i].x() == q.x() and pol[i].y() == q.y():
+                # point lies on the vertex
+                return -1
+
             # get position of point and edge
             pos = self.getPointAndEdgePosition(q, pol[i], pol[i+1])
 
