@@ -9,13 +9,13 @@ class Algorithms:
 
     def getPointAndEdgePosition(self, q, p1: QPointF, p2: QPointF):
         # compute vectors
-        v1_x = q.x() - p1.x()
-        v1_y = q.y() - p1.y()
-        v2_x = p2.x() - p1.x()
-        v2_y = p2.y() - p1.y()
+        u_x = q.x() - p1.x()
+        u_y = q.y() - p1.y()
+        v_x = p2.x() - p1.x()
+        v_y = p2.y() - p1.y()
 
         # compute determinant
-        d = (v1_x * v2_y) - (v2_x * v1_y)
+        d = (u_x * v_y) - (v_x * u_y)
 
         # determine point and edge position
         # point in left halfplane
@@ -31,32 +31,32 @@ class Algorithms:
 
     def getAngle(self, q, p1: QPointF, p2: QPointF):
         # compute vectors
-        v1_x = p1.x() - q.x()
-        v1_y = p1.y() - q.y()
-        v2_x = p2.x() - q.x()
-        v2_y = p2.y() - q.y()
+        u_x = p1.x() - q.x()
+        u_y = p1.y() - q.y()
+        v_x = p2.x() - q.x()
+        v_y = p2.y() - q.y()
 
         # compute the scalar product of vectors
-        v1v2 = v1_x * v2_x + v1_y * v2_y
+        uv = u_x * v_x + u_y * v_y
 
         # compute the norms of vectors
-        norm_v1 = sqrt(v1_x**2 + v1_y**2)
-        norm_v2 = sqrt(v2_x ** 2 + v2_y ** 2)
+        norm_u = sqrt(u_x**2 + u_y**2)
+        norm_v = sqrt(v_x ** 2 + v_y ** 2)
 
         # point lies on the edge
-        if norm_v1 == 0 or norm_v2 == 0:
+        if norm_u == 0 or norm_v == 0:
             return abs(acos(1))
 
         # round down to 1 if greater
-        if v1v2 / (norm_v1 * norm_v2) > 1:
+        if uv / (norm_u * norm_v) > 1:
             return abs(acos(1))
 
         # round up to -1 if smaller
-        elif v1v2 / (norm_v1 * norm_v2) < -1:
+        elif uv / (norm_u * norm_v) < -1:
             return abs(acos(-1))
 
         # return angle
-        return abs(acos(v1v2 / (norm_v1 * norm_v2)))
+        return abs(acos(uv / (norm_u * norm_v)))
 
     def windingNumber(self, q, pol):
         # initialize sum of omega and tolerance
@@ -94,7 +94,7 @@ class Algorithms:
         return 0
 
     def rayCrossing(self, q, pol):
-        # initialize number of intersections and number of vertices
+        # initialize number of left and right intersections and number of vertices
         kl = 0
         kr = 0
         n = len(pol)

@@ -9,7 +9,7 @@ class Draw(QWidget):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        # query point, lists for storing polygons and their results of analysis
+        # initialize properties
         self.__q = QPointF(-10,-10)
         self.__polygons = []
         self.__pol_res = []
@@ -24,7 +24,7 @@ class Draw(QWidget):
 
         # return previous polygons if dialog window is closed
         if bool(filename[0]) == False:
-           return self.__polygons
+            return self.__polygons
 
         # load objects from shapefile
         shp = shapefile.Reader(path)
@@ -47,8 +47,8 @@ class Draw(QWidget):
         for k in range(len(self.__features)):
             self.__polygons[k] = QPolygonF()
             for point in self.__features[k].points:
-                x = int(((point[0] - self.__min_max[0])/(self.__min_max[2] - self.__min_max[0])*width))
-                y = int((height - (point[1] - self.__min_max[1])/(self.__min_max[3] - self.__min_max[1])*(height)))
+                x = int(((point[0] - self.__min_max[0]) / (self.__min_max[2] - self.__min_max[0]) * width))
+                y = int((height - (point[1] - self.__min_max[1]) / (self.__min_max[3] - self.__min_max[1]) * (height)))
                 p = QPointF(x,y)
                 self.__polygons[k].append(p)
 
@@ -79,14 +79,10 @@ class Draw(QWidget):
             qp.setPen(QColor.fromString("steelblue"))
             qp.setBrush(QColor.fromString("powderblue"))
 
-            # set diferent color for polygons containing point
-            if self.__pol_res and (self.__pol_res[index] == 1): #or self.__pol_res and (self.__pol_res[index] == -1):
-                qp.setPen(QColor.fromString("green"))
+            # set diferent color for polygons containing point or with point on its edge
+            if self.__pol_res and (self.__pol_res[index] == 1) or self.__pol_res and (self.__pol_res[index] == -1):
+                qp.setPen(QColor.fromString("steelblue"))
                 qp.setBrush(QColor.fromString("yellowgreen"))
-
-            if self.__pol_res and (self.__pol_res[index] == -1):
-                qp.setPen(QColor.fromString("purple"))
-                qp.setBrush(QColor.fromString("palevioletred"))
 
             qp.drawPolygon(polygon)
 
