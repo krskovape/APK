@@ -14,7 +14,8 @@ class Draw(QWidget):
         self.__polygons = []
         self.__pol_res = []
         self.__features = None
-        self.__min_max = []
+        self.__min_max = [0,0,10,10]
+        self.__no_data = False
 
     # function for loading file
     def loadData(self):
@@ -22,9 +23,10 @@ class Draw(QWidget):
         filename = QFileDialog.getOpenFileName(self, "Open file", "", "Shapefile (*.shp)")
         path = filename[0]
 
-        # return previous polygons if dialog window is closed
+        # update no data property to draw hidden polygon if dialog window is closed
         if bool(filename[0]) == False:
-            return self.__polygons
+            self.__no_data = True
+            return
 
         # load objects from shapefile
         shp = shapefile.Reader(path)
@@ -40,17 +42,26 @@ class Draw(QWidget):
         self.__min_max = [min(x_lst), min(y_lst), max(x_lst), max(y_lst)]
 
     def rescaleData(self, width, height):
-        # initialize list for storing polygons
-        self.__polygons = [None] * len(self.__features)
+        # construct hidden polygon
+        if self.__no_data == True:
+            self.__polygons = []
+            pol = QPolygonF()
+            pol.append(QPointF(0,0)); pol.append(QPointF(-10,0)); pol.append(QPointF(0,-10)); pol.append(QPointF(-10,-10))
+            self.__polygons.append(pol)
 
-        # rescale data and create polygons
-        for k in range(len(self.__features)):
-            self.__polygons[k] = QPolygonF()
-            for point in self.__features[k].points:
-                x = int(((point[0] - self.__min_max[0]) / (self.__min_max[2] - self.__min_max[0]) * width))
-                y = int((height - (point[1] - self.__min_max[1]) / (self.__min_max[3] - self.__min_max[1]) * (height)))
-                p = QPointF(x,y)
-                self.__polygons[k].append(p)
+        # rescale data
+        else:
+            # initialize list for storing polygons
+            self.__polygons = [None] * len(self.__features)
+
+            # rescale data and create polygons
+            for k in range(len(self.__features)):
+                self.__polygons[k] = QPolygonF()
+                for point in self.__features[k].points:
+                    x = int(((point[0] - self.__min_max[0]) / (self.__min_max[2] - self.__min_max[0]) * width))
+                    y = int((height - (point[1] - self.__min_max[1]) / (self.__min_max[3] - self.__min_max[1]) * (height)))
+                    p = QPointF(x,y)
+                    self.__polygons[k].append(p)
 
     # left mouse button click
     def mousePressEvent(self, e:QMouseEvent):
