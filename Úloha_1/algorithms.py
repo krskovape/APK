@@ -43,9 +43,9 @@ class Algorithms:
         norm_u = sqrt(u_x**2 + u_y**2)
         norm_v = sqrt(v_x ** 2 + v_y ** 2)
 
-        # point lies on the edge
+        # point lies on the vertex
         if norm_u == 0 or norm_v == 0:
-            return abs(acos(1))
+            return 0
 
         # round down to 1 if greater
         if uv / (norm_u * norm_v) > 1:

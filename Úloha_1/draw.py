@@ -2,10 +2,8 @@ from PyQt6.QtCore import *
 from PyQt6.QtGui import *
 from PyQt6.QtWidgets import *
 import shapefile
-from math import inf
 
 class Draw(QWidget):
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -17,7 +15,7 @@ class Draw(QWidget):
         self.__min_max = [0,0,10,10]
         self.__no_data = False
 
-    # function for loading file
+    # function for loading input data
     def loadData(self):
         # get path to file via Dialog window
         filename = QFileDialog.getOpenFileName(self, "Open file", "", "Shapefile (*.shp)")
@@ -27,6 +25,7 @@ class Draw(QWidget):
         if bool(filename[0]) == False:
             self.__no_data = True
             return
+        self.__no_data = False
 
         # load objects from shapefile
         shp = shapefile.Reader(path)
@@ -41,6 +40,7 @@ class Draw(QWidget):
                 y_lst.append(point[1])
         self.__min_max = [min(x_lst), min(y_lst), max(x_lst), max(y_lst)]
 
+    # rescale data to fit Canvas
     def rescaleData(self, width, height):
         # construct hidden polygon
         if self.__no_data == True:
@@ -90,7 +90,7 @@ class Draw(QWidget):
             qp.setPen(QColor.fromString("steelblue"))
             qp.setBrush(QColor.fromString("powderblue"))
 
-            # set diferent color for polygons containing point or with point on its edge
+            # set diferent color for polygons containing point or with point on its edge or vertex
             if self.__pol_res and (self.__pol_res[index] == 1) or self.__pol_res and (self.__pol_res[index] == -1):
                 qp.setPen(QColor.fromString("steelblue"))
                 qp.setBrush(QColor.fromString("yellowgreen"))
@@ -110,11 +110,11 @@ class Draw(QWidget):
         # end draw
         qp.end()
 
-    # append result to list
+    # append result of analysis to list
     def setResult(self, result):
         self.__pol_res.append(result)
 
-    # clear all polygons
+    # clear all polygons and point
     def clearPol(self):
         self.__polygons = []
         self.__q.setX(-10)
