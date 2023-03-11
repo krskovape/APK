@@ -12,6 +12,6 @@ obsahující pět obrázků s ikonami. Pro zapnutí aplikace je poté zapotřeb�
 ### Vstupní data
 
 Aplikace vykresluje polygony načtené z vybraného souboru ve formátu `*shp`. Vstupní data musejí být v souřadnicovém systému S-JTSK, 
-respektive jejich souřadnice musejí mít záporné hodnoty.
+případně v jiném systému, který definuje souřadnice také v metrech.
 
 Ukázková vstupní data jsou polygony městských částí v Praze dostupné z portálu pražských [Opendat](https://www.geoportalpraha.cz/cs/data/otevrena-data/E9E20135-18B3-4163-B516-45613956B856).
