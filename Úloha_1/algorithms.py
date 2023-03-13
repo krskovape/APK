@@ -84,12 +84,10 @@ class Algorithms:
             if pos == 0:
                 omega_sum -= omega
 
-            # colinear point
-            else:
-                # try if point lies between the nodes
-                if (pol[i].x() - q.x()) * (pol[i+1].x() - q.x()) <= 0 and (pol[i].y() - q.y()) * (pol[i+1].y() - q.y()) <= 0:
-                    # point lies on the edge
-                    return -1
+            # colinear point, try if lies between the nodes
+            elif (pol[i].x() - q.x()) * (pol[i+1].x() - q.x()) <= 0 and (pol[i].y() - q.y()) * (pol[i+1].y() - q.y()) <= 0:
+                # point lies on the edge
+                return -1
 
         # point is inside
         if abs(abs(omega_sum) - 2*pi) < epsilon:
@@ -121,20 +119,17 @@ class Algorithms:
             if (yi1r - yir) == 0:
                 continue
 
+            # compute intersection
+            xm = (xi1r * yir - xir * yi1r) / (yi1r - yir)
+
             # lower segment
             if (yi1r < 0) != (yir < 0):
-                # compute intersection
-                xm = (xi1r * yir - xir * yi1r) / (yi1r - yir)
-
                 # increment amount of intersections
                 if xm < 0:
                     kl += 1
 
             # upper segment
             if (yi1r > 0) != (yir > 0):
-                # compute intersection
-                xm = (xi1r * yir - xir * yi1r) / (yi1r - yir)
-
                 # increment amount of intersections
                 if xm > 0:
                     kr += 1
