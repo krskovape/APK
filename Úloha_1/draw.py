@@ -45,8 +45,7 @@ class Draw(QWidget):
         # construct hidden polygon
         if self.__no_data == True:
             self.__polygons = []
-            pol = QPolygonF()
-            pol.append(QPointF(0,0)); pol.append(QPointF(-10,0)); pol.append(QPointF(0,-10)); pol.append(QPointF(-10,-10))
+            pol = QPolygonF([QPointF(0,0), QPointF(-10,0), QPointF(0,-10), QPointF(-10,-10)])
             self.__polygons.append(pol)
 
         # rescale data
