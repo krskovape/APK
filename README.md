@@ -1,2 +1,2 @@
 # APK
-Úlohy z předmětu Algoritmy počítačové kartografie
+Úlohy Vandy Hlaváčkové a Petry Krskové z předmětu Algoritmy počítačové kartografie
