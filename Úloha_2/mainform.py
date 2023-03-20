@@ -76,9 +76,11 @@ class Ui_MainForm(object):
         self.toolBar.addAction(self.actionClear)
 
         # connect signals to slots
-        self.actionMinimum_Area_Enclosing_Rectangle.triggered.connect(self.simplifyERClick)
-        self.actionWall_Average.triggered.connect((self.simplifyWAClick))
+        self.actionOpen.triggered.connect(self.openFile)
+        self.actionMinimum_Area_Enclosing_Rectangle.triggered.connect(self.simplifyERClickPolygons)
+        self.actionWall_Average.triggered.connect((self.simplifyWAClickPolygons))
         self.actionClear.triggered.connect(self.clearCanvas)
+
 
         self.retranslateUi(MainForm)
         QtCore.QMetaObject.connectSlotsByName(MainForm)
@@ -97,6 +99,12 @@ class Ui_MainForm(object):
         self.actionWall_Average.setText(_translate("MainForm", "Wall Average"))
         self.actionClear.setText(_translate("MainForm", "Clear"))
 
+    def openFile(self):
+        width = self.Canvas.frameSize().width()
+        height = self.Canvas.frameSize().height()
+        self.Canvas.loadData()
+        self.Canvas.rescaleData(width, height)
+
     def simplifyERClick(self):
         # get polygon
         pol = self.Canvas.getPolygon()
@@ -111,6 +119,22 @@ class Ui_MainForm(object):
 
         self.Canvas.repaint()
 
+    def simplifyERClickPolygons(self):
+        # get polygon
+        polygons = self.Canvas.getPolygons()
+
+        a = Algorithms()
+
+        for pol in polygons:
+
+            # ch = a.createCH(pol)
+            # self.Canvas.setCH(ch)
+
+            er = a.minAreaEnclosingRectangle(pol)
+            self.Canvas.setER(er)
+
+        self.Canvas.repaint()
+
     def simplifyWAClick(self):
         # get polygon
         pol = self.Canvas.getPolygon()
@@ -122,6 +146,21 @@ class Ui_MainForm(object):
 
         er = a.wallAverage(pol)
         self.Canvas.setER(er)
+
+        self.Canvas.repaint()
+
+    def simplifyWAClickPolygons(self):
+        # get polygon
+        polygons = self.Canvas.getPolygons()
+
+        a = Algorithms()
+
+        for pol in polygons:
+            # ch = a.createCH(pol)
+            # self.Canvas.setCH(ch)
+
+            er = a.wallAverage(pol)
+            self.Canvas.setER(er)
 
         self.Canvas.repaint()
 
