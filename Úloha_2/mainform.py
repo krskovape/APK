@@ -54,16 +54,25 @@ class Ui_MainForm(object):
         icon3.addPixmap(QtGui.QPixmap("icons/wa.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         self.actionWall_Average.setIcon(icon3)
         self.actionWall_Average.setObjectName("actionWall_Average")
+
+        self.actionLongest_Edge = QtGui.QAction(parent=MainForm)
+        #icon5 = QtGui.QIcon()
+        #icon5.addPixmap(QtGui.QPixmap("icons/wa.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
+        self.actionLongest_Edge.setIcon(icon3)
+        self.actionLongest_Edge.setObjectName("actionLongest_Edge")
+
         self.actionClear = QtGui.QAction(parent=MainForm)
         icon4 = QtGui.QIcon()
         icon4.addPixmap(QtGui.QPixmap("icons/clear.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         self.actionClear.setIcon(icon4)
         self.actionClear.setObjectName("actionClear")
+
         self.menuFile.addAction(self.actionOpen)
         self.menuFile.addSeparator()
         self.menuFile.addAction(self.actionClose)
         self.menuSimplify.addAction(self.actionMinimum_Area_Enclosing_Rectangle)
         self.menuSimplify.addAction(self.actionWall_Average)
+        self.menuSimplify.addAction(self.actionLongest_Edge)
         self.menuSimplify.addSeparator()
         self.menuSimplify.addAction(self.actionClear)
         self.menubar.addAction(self.menuFile.menuAction())
@@ -72,6 +81,7 @@ class Ui_MainForm(object):
         self.toolBar.addSeparator()
         self.toolBar.addAction(self.actionMinimum_Area_Enclosing_Rectangle)
         self.toolBar.addAction(self.actionWall_Average)
+        self.toolBar.addAction(self.actionLongest_Edge)
         self.toolBar.addSeparator()
         self.toolBar.addAction(self.actionClear)
 
@@ -97,6 +107,7 @@ class Ui_MainForm(object):
         self.actionClose.setToolTip(_translate("MainForm", "Close file"))
         self.actionMinimum_Area_Enclosing_Rectangle.setText(_translate("MainForm", "Minimum Area Enclosing Rectangle"))
         self.actionWall_Average.setText(_translate("MainForm", "Wall Average"))
+        self.actionLongest_Edge.setText(_translate("MainForm", "Longest Edge"))
         self.actionClear.setText(_translate("MainForm", "Clear"))
 
     def openFile(self):
