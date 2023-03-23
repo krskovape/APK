@@ -77,10 +77,10 @@ class Ui_MainForm(object):
 
         # connect signals to slots
         self.actionOpen.triggered.connect(self.openFile)
+        self.actionClose.triggered.connect(sys.exit)
         self.actionMinimum_Area_Enclosing_Rectangle.triggered.connect(self.simplifyERClickPolygons)
         self.actionWall_Average.triggered.connect((self.simplifyWAClickPolygons))
         self.actionClear.triggered.connect(self.clearCanvas)
-
 
         self.retranslateUi(MainForm)
         QtCore.QMetaObject.connectSlotsByName(MainForm)

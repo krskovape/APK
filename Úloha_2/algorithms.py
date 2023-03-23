@@ -280,3 +280,36 @@ class Algorithms:
         er_r = self.resizeRectangle(er, pol)
 
         return er_r
+
+    def longestEdge(self, pol: QPolygonF):
+        # process all edges
+        n = len(pol)
+        len_max = 0
+
+        for i in range(1, n):
+            # compute sigma i
+            dx_i = pol[(i + 1) % n].x() - pol[i].x()
+            dy_i = pol[(i + 1) % n].y() - pol[i].y()
+            sigma_i = atan2(dy_i, dx_i)
+
+            # compute length of the edge
+            len_e = sqrt(dx_i **2 + dy_i **2)
+
+            if len_e > len_max:
+                len_max = len_e
+                index = i
+                sigma = sigma_i
+
+        # rotate building
+        pol_rot = self.rotate(pol, -sigma)
+
+        # find MMB of rotated building
+        mmb, area = self.minMaxBox(pol_rot)
+
+        # rotate MMB
+        er = self.rotate(mmb, sigma)
+
+        # resize building
+        er_r = self.resizeRectangle(er, pol)
+
+        return er_r
