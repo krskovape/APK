@@ -60,6 +60,16 @@ class Ui_MainForm(object):
         #icon5.addPixmap(QtGui.QPixmap("icons/wa.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         self.actionLongest_Edge.setIcon(icon3)
         self.actionLongest_Edge.setObjectName("actionLongest_Edge")
+        self.actionWeighted_Bisector = QtGui.QAction(parent=MainForm)
+        # icon6 = QtGui.QIcon()
+        # icon6.addPixmap(QtGui.QPixmap("icons/wa.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
+        self.actionWeighted_Bisector.setIcon(icon3)
+        self.actionWeighted_Bisector.setObjectName("actionWeighted_Bisector")
+        self.actionPrincipal_Component = QtGui.QAction(parent=MainForm)
+        # icon7 = QtGui.QIcon()
+        # icon7.addPixmap(QtGui.QPixmap("icons/wa.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
+        self.actionPrincipal_Component.setIcon(icon3)
+        self.actionPrincipal_Component.setObjectName("actionPrincipal_Component")
 
         self.actionClear = QtGui.QAction(parent=MainForm)
         icon4 = QtGui.QIcon()
@@ -73,6 +83,8 @@ class Ui_MainForm(object):
         self.menuSimplify.addAction(self.actionMinimum_Area_Enclosing_Rectangle)
         self.menuSimplify.addAction(self.actionWall_Average)
         self.menuSimplify.addAction(self.actionLongest_Edge)
+        self.menuSimplify.addAction(self.actionWeighted_Bisector)
+        self.menuSimplify.addAction(self.actionPrincipal_Component)
         self.menuSimplify.addSeparator()
         self.menuSimplify.addAction(self.actionClear)
         self.menubar.addAction(self.menuFile.menuAction())
@@ -82,6 +94,8 @@ class Ui_MainForm(object):
         self.toolBar.addAction(self.actionMinimum_Area_Enclosing_Rectangle)
         self.toolBar.addAction(self.actionWall_Average)
         self.toolBar.addAction(self.actionLongest_Edge)
+        self.toolBar.addAction(self.actionWeighted_Bisector)
+        self.toolBar.addAction(self.actionPrincipal_Component)
         self.toolBar.addSeparator()
         self.toolBar.addAction(self.actionClear)
 
@@ -109,6 +123,8 @@ class Ui_MainForm(object):
         self.actionMinimum_Area_Enclosing_Rectangle.setText(_translate("MainForm", "Minimum Area Enclosing Rectangle"))
         self.actionWall_Average.setText(_translate("MainForm", "Wall Average"))
         self.actionLongest_Edge.setText(_translate("MainForm", "Longest Edge"))
+        self.actionWeighted_Bisector.setText(_translate("MainForm", "Weighted Bisector"))
+        self.actionPrincipal_Component.setText(_translate("MainForm", "Principal Component Analysis"))
         self.actionClear.setText(_translate("MainForm", "Clear"))
 
     def openFile(self):
