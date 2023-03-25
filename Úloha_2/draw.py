@@ -86,17 +86,18 @@ class Draw(QWidget):
         # start draw
         qp.begin(self)
 
-        # # set attributes for building
-        # qp.setPen(Qt.GlobalColor.black)
-        # qp.setBrush(Qt.GlobalColor.white)
-        #
-        # # draw building
-        # qp.drawPolygon(self.__pol)
-        for index, polygon in enumerate(self.__polygons):
-            # set attributes
-            qp.setPen(QColor.fromString("steelblue"))
-            qp.setBrush(QColor.fromString("powderblue"))
-            qp.drawPolygon(polygon)
+        # set attributes for building
+        qp.setPen(Qt.GlobalColor.black)
+        qp.setBrush(Qt.GlobalColor.white)
+
+        # draw building
+        qp.drawPolygon(self.__pol)
+
+        # for index, polygon in enumerate(self.__polygons):
+        #     # set attributes
+        #     qp.setPen(QColor.fromString("steelblue"))
+        #     qp.setBrush(QColor.fromString("powderblue"))
+        #     qp.drawPolygon(polygon)
 
         # set attributes for convex hull
         qp.setPen(Qt.GlobalColor.blue)
@@ -114,12 +115,12 @@ class Draw(QWidget):
             qp.drawPolygon(er)
         self.__er = []
 
-        # # set attributes for building
-        # qp.setPen(Qt.GlobalColor.black)
-        # qp.setBrush(Qt.GlobalColor.transparent)
-        #
-        # # draw building
-        # qp.drawPolygon(self.__pol)
+        # set attributes for building
+        qp.setPen(Qt.GlobalColor.black)
+        qp.setBrush(Qt.GlobalColor.transparent)
+
+        # draw building
+        qp.drawPolygon(self.__pol)
 
         # end draw
         qp.end()
@@ -138,6 +139,7 @@ class Draw(QWidget):
 
     def cleanCanvas(self):
         self.__polygons = []
+        self.__pol = []
         self.__ch = []
         self.__er = []
         self.repaint()

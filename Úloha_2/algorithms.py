@@ -286,7 +286,7 @@ class Algorithms:
         n = len(pol)
         len_max = 0
 
-        for i in range(1, n):
+        for i in range(n):
             # compute sigma i
             dx_i = pol[(i + 1) % n].x() - pol[i].x()
             dy_i = pol[(i + 1) % n].y() - pol[i].y()

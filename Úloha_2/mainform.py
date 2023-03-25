@@ -89,7 +89,8 @@ class Ui_MainForm(object):
         self.actionOpen.triggered.connect(self.openFile)
         self.actionClose.triggered.connect(sys.exit)
         self.actionMinimum_Area_Enclosing_Rectangle.triggered.connect(self.simplifyERClickPolygons)
-        self.actionWall_Average.triggered.connect((self.simplifyWAClickPolygons))
+        self.actionWall_Average.triggered.connect(self.simplifyWAClickPolygons)
+        self.actionLongest_Edge.triggered.connect(self.simplifyLEClick)
         self.actionClear.triggered.connect(self.clearCanvas)
 
         self.retranslateUi(MainForm)
@@ -172,6 +173,20 @@ class Ui_MainForm(object):
 
             er = a.wallAverage(pol)
             self.Canvas.setER(er)
+
+        self.Canvas.repaint()
+
+    def simplifyLEClick(self):
+        # get polygon
+        pol = self.Canvas.getPolygon()
+
+        a = Algorithms()
+
+        ch = a.createCH(pol)
+        self.Canvas.setCH(ch)
+
+        er = a.longestEdge(pol)
+        self.Canvas.setER(er)
 
         self.Canvas.repaint()
 
