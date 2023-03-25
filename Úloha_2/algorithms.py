@@ -2,6 +2,7 @@ from PyQt6.QtCore import *
 from PyQt6.QtGui import *
 from PyQt6.QtWidgets import *
 from math import *
+import numpy as np
 
 class Algorithms:
     def __init__(self):
@@ -299,6 +300,36 @@ class Algorithms:
                 len_max = len_e
                 index = i
                 sigma = sigma_i
+
+        # rotate building
+        pol_rot = self.rotate(pol, -sigma)
+
+        # find MMB of rotated building
+        mmb, area = self.minMaxBox(pol_rot)
+
+        # rotate MMB
+        er = self.rotate(mmb, sigma)
+
+        # resize building
+        er_r = self.resizeRectangle(er, pol)
+
+        return er_r
+
+    def principalComponent(self, pol: QPolygonF):
+        # compute matrix of all nodes
+        A = []
+        for i in range(len(pol)):
+            A.append([pol[i].x(),pol[i].y()])
+        print(A)
+
+        # singular value decomposition
+        U, s, VT = np.linalg.svd(A)
+
+        # compute vectors and sigma
+        vectors = VT.transpose()
+        v1 = vectors[0][0]
+        v2 = vectors[0][1]
+        sigma = atan2(v2, v1)
 
         # rotate building
         pol_rot = self.rotate(pol, -sigma)

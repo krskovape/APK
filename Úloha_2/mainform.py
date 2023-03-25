@@ -105,6 +105,7 @@ class Ui_MainForm(object):
         self.actionMinimum_Area_Enclosing_Rectangle.triggered.connect(self.simplifyERClickPolygons)
         self.actionWall_Average.triggered.connect(self.simplifyWAClickPolygons)
         self.actionLongest_Edge.triggered.connect(self.simplifyLEClick)
+        self.actionPrincipal_Component.triggered.connect(self.simplifyPCAClick)
         self.actionClear.triggered.connect(self.clearCanvas)
 
         self.retranslateUi(MainForm)
@@ -203,6 +204,21 @@ class Ui_MainForm(object):
 
         er = a.longestEdge(pol)
         self.Canvas.setER(er)
+
+        self.Canvas.repaint()
+
+    def simplifyPCAClick(self):
+        # get polygon
+        pol = self.Canvas.getPolygon()
+
+        a = Algorithms()
+
+        ch = a.createCH(pol)
+        self.Canvas.setCH(ch)
+
+        er = a.principalComponent(pol)
+        self.Canvas.setER(er)
+        #a.principalComponent(pol)
 
         self.Canvas.repaint()
 
