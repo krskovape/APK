@@ -199,7 +199,7 @@ class Ui_MainForm(object):
 
         a = Algorithms()
 
-        ch = a.jarvisScan(pol)
+        ch = a.grahamScan(pol)
         self.Canvas.setCH(ch)
 
         er = a.longestEdge(pol)

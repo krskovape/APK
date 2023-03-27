@@ -56,6 +56,27 @@ class Algorithms:
         # angle
         return acos(arg)
 
+    def getPointLinePosition(self, p: QPointF, p1: QPointF, p2: QPointF):
+        # compute vectors
+        ux = p2.x() - p1.x()
+        uy = p2.y() - p1.y()
+        vx = p.x() - p1.x()
+        vy = p.y() - p1.y()
+
+        # compute determinant
+        t = ux * vy - uy * vx
+
+        # point is in the left halfplane
+        if t > 0:
+            return 1
+
+        # point is in the right halfplane
+        if t < 0:
+            return 0
+
+        # colinear point
+        return -1
+
     # compute lenght between two points
     def getLength(self, p1: QPointF, p2: QPointF):
         # compute vectors
@@ -121,7 +142,58 @@ class Algorithms:
         x_p = QPointF(q.x() + 10, q.y())
 
         # sort points by angle
+        points = {}
+        for i in range(len(pol)):
+            # skip pivot
+            if pol[i] == q:
+                continue
 
+            # compute angle
+            omega = self.get2LinesAngle(q, x_p, q, pol[i])
+
+            # store omega as key
+            if omega in points.keys():
+                # choose point further from pivot q
+                idx = points[omega]
+                l_in = self.getLength(q, pol[idx])
+                l_om = self.getLength(q, pol[i])
+                if l_om > l_in:
+                    points[omega] = i
+            else:
+                points[omega] = i
+
+        # sort points in S by omega
+        points_sort = {k: points[k] for k in sorted(points)}
+
+        # append pivot and first point to the stack
+        S = []
+        S.append(q)
+        S.append(pol[list(points_sort.values())[0]])
+
+        # process sorted points
+        j = 1
+        while j < len(points_sort):
+            n = len(ch)
+            # get point in sorted list
+            pj = pol[list(points_sort.values())[j]]
+
+            # get position of pj and last edge of the convex hull
+            pos = self.getPointLinePosition(pj, S[-2], S[-1])
+
+            # point in left halfplane, add point to convex hull
+            if pos == 1:
+                S.append(pj)
+                j += 1
+
+            # point in right halfplane, remove last node of convex hull
+            else:
+                S.pop()
+
+        # add points from the stack to the convex hull
+        for p in S:
+            ch.append(p)
+
+        return ch
 
     def rotate(self, pol: QPolygonF, sig: float) -> QPolygonF:
         # rotated polygon
@@ -311,7 +383,7 @@ class Algorithms:
 
         for i in range(n):
             # get length of the edge
-            len_e = self.getLenght(pol[i], pol[(i + 1) % n])
+            len_e = self.getLength(pol[i], pol[(i + 1) % n])
 
             if len_e > len_max:
                 len_max = len_e
