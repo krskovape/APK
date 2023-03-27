@@ -147,6 +147,16 @@ class Ui_MainForm(object):
         self.Canvas.loadData()
         self.Canvas.rescaleData(width, height)
 
+    def createCH(self, pol):
+        a = Algorithms()
+
+        if self.comboBox.currentIndex() == 0:
+            ch = a.jarvisScan(pol)
+        if self.comboBox.currentIndex() == 1:
+            ch = a.grahamScan(pol)
+
+        return ch
+
     def simplifyERClick(self):
         # get polygon
         pol = self.Canvas.getPolygon()
