@@ -112,9 +112,9 @@ class Ui_MainForm(object):
         # connect signals to slots
         self.actionOpen.triggered.connect(self.openFile)
         self.actionClose.triggered.connect(sys.exit)
-        self.actionMinimum_Area_Enclosing_Rectangle.triggered.connect(self.simplifyERClickPolygons)
-        self.actionWall_Average.triggered.connect(self.simplifyWAClickPolygons)
-        self.actionLongest_Edge.triggered.connect(self.simplifyLEClick)
+        self.actionMinimum_Area_Enclosing_Rectangle.triggered.connect(self.simplifyMinEnclosingRectangle)
+        self.actionWall_Average.triggered.connect(self.simplifyWallAverage)
+        self.actionLongest_Edge.triggered.connect(self.simplifyLongestEdge)
         self.actionPrincipal_Component.triggered.connect(self.simplifyPCAClick)
         self.actionClear.triggered.connect(self.clearCanvas)
 
@@ -157,21 +157,7 @@ class Ui_MainForm(object):
 
         return ch
 
-    def simplifyERClick(self):
-        # get polygon
-        pol = self.Canvas.getPolygon()
-
-        a = Algorithms()
-
-        ch = a.jarvisScan(pol)
-        self.Canvas.setCH(ch)
-
-        er = a.minAreaEnclosingRectangle(pol)
-        self.Canvas.setER(er)
-
-        self.Canvas.repaint()
-
-    def simplifyERClickPolygons(self):
+    def simplifyMinEnclosingRectangle(self):
         # get polygon
         polygons = self.Canvas.getPolygons()
 
@@ -179,36 +165,22 @@ class Ui_MainForm(object):
 
         for pol in polygons:
 
-            # ch = a.jarvisScan(pol)
+            ch = self.createCH(pol)
             # self.Canvas.setCH(ch)
 
-            er = a.minAreaEnclosingRectangle(pol)
+            er = a.minAreaEnclosingRectangle(pol, ch)
             self.Canvas.setER(er)
 
         self.Canvas.repaint()
 
-    def simplifyWAClick(self):
-        # get polygon
-        pol = self.Canvas.getPolygon()
-
-        a = Algorithms()
-
-        ch = a.jarvisScan(pol)
-        self.Canvas.setCH(ch)
-
-        er = a.wallAverage(pol)
-        self.Canvas.setER(er)
-
-        self.Canvas.repaint()
-
-    def simplifyWAClickPolygons(self):
+    def simplifyWallAverage(self):
         # get polygon
         polygons = self.Canvas.getPolygons()
 
         a = Algorithms()
 
         for pol in polygons:
-            # ch = a.jarvisScan(pol)
+            ch = self.createCH(pol)
             # self.Canvas.setCH(ch)
 
             er = a.wallAverage(pol)
@@ -216,14 +188,14 @@ class Ui_MainForm(object):
 
         self.Canvas.repaint()
 
-    def simplifyLEClick(self):
+    def simplifyLongestEdge(self):
         # get polygon
         pol = self.Canvas.getPolygon()
 
         a = Algorithms()
 
-        ch = a.grahamScan(pol)
-        self.Canvas.setCH(ch)
+        ch = self.createCH(pol)
+        #self.Canvas.setCH(ch)
 
         er = a.longestEdge(pol)
         self.Canvas.setER(er)

@@ -93,11 +93,11 @@ class Draw(QWidget):
         # draw building
         qp.drawPolygon(self.__pol)
 
-        # for index, polygon in enumerate(self.__polygons):
-        #     # set attributes
-        #     qp.setPen(QColor.fromString("steelblue"))
-        #     qp.setBrush(QColor.fromString("powderblue"))
-        #     qp.drawPolygon(polygon)
+        for index, polygon in enumerate(self.__polygons):
+            # set attributes
+            qp.setPen(QColor.fromString("steelblue"))
+            qp.setBrush(QColor.fromString("powderblue"))
+            qp.drawPolygon(polygon)
 
         # set attributes for convex hull
         qp.setPen(Qt.GlobalColor.blue)

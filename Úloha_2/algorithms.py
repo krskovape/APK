@@ -233,10 +233,7 @@ class Algorithms:
 
         return minmax_box, area
 
-    def minAreaEnclosingRectangle(self, pol: QPolygonF):
-        # create convex hull
-        ch = self.jarvisScan(pol)
-
+    def minAreaEnclosingRectangle(self, pol: QPolygonF, ch):
         # get minmax box and area
         mmb_min, area_min = self.minMaxBox(ch)
         sigma_min = 0
