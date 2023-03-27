@@ -140,7 +140,7 @@ class Ui_MainForm(object):
 
         a = Algorithms()
 
-        ch = a.createCH(pol)
+        ch = a.jarvisScan(pol)
         self.Canvas.setCH(ch)
 
         er = a.minAreaEnclosingRectangle(pol)
@@ -156,7 +156,7 @@ class Ui_MainForm(object):
 
         for pol in polygons:
 
-            # ch = a.createCH(pol)
+            # ch = a.jarvisScan(pol)
             # self.Canvas.setCH(ch)
 
             er = a.minAreaEnclosingRectangle(pol)
@@ -170,7 +170,7 @@ class Ui_MainForm(object):
 
         a = Algorithms()
 
-        ch = a.createCH(pol)
+        ch = a.jarvisScan(pol)
         self.Canvas.setCH(ch)
 
         er = a.wallAverage(pol)
@@ -185,7 +185,7 @@ class Ui_MainForm(object):
         a = Algorithms()
 
         for pol in polygons:
-            # ch = a.createCH(pol)
+            # ch = a.jarvisScan(pol)
             # self.Canvas.setCH(ch)
 
             er = a.wallAverage(pol)
@@ -199,7 +199,7 @@ class Ui_MainForm(object):
 
         a = Algorithms()
 
-        ch = a.createCH(pol)
+        ch = a.jarvisScan(pol)
         self.Canvas.setCH(ch)
 
         er = a.longestEdge(pol)
@@ -213,7 +213,7 @@ class Ui_MainForm(object):
 
         a = Algorithms()
 
-        ch = a.createCH(pol)
+        ch = a.jarvisScan(pol)
         self.Canvas.setCH(ch)
 
         er = a.principalComponent(pol)

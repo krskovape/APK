@@ -56,50 +56,72 @@ class Algorithms:
         # angle
         return acos(arg)
 
-    def createCH(self, pol:QPolygonF):
-        #Create CH using Jarvis scan
+    # compute lenght between two points
+    def getLength(self, p1: QPointF, p2: QPointF):
+        # compute vectors
+        dx_i = p2.x() - p1.x()
+        dy_i = p2.y() - p1.y()
+
+        # compute length of the edge
+        return sqrt(dx_i ** 2 + dy_i ** 2)
+
+    # create convex hull using Jarvis scan
+    def jarvisScan(self, pol: QPolygonF):
+        # initialize convex hull
         ch = QPolygonF()
 
-        #Find pivot
+        # find pivot
         q = min(pol, key = lambda k : k.y())
 
-        #Initialize pj-1, pj
+        # initialize pj-1, pj
         pj1 = QPointF(q.x() - 1, q.y())
         pj = q
 
-        #Add q to convex hull
+        # add q to convex hull
         ch.append(q)
 
         # Jarvis scan
         while True:
-            #Initialize maximum
+            # initialize maximum
             phi_max = 0
             i_max = -1
 
-            #Find suitable point maximizing angle
+            # find suitable point maximizing angle
             for i in range(len(pol)):
 
                 if pj != pol[i]:
-                    #Measure angle
+                    # measure angle
                     phi = self.get2LinesAngle(pj, pj1, pj, pol[i])
 
-                    #Actualize phi_max
+                    # actualize phi_max
                     if phi > phi_max:
                         phi_max = phi
                         i_max = i
 
-            # Append point to CH
+            # append point to CH
             ch.append(pol[i_max])
 
-            #Actualize last two points
+            # actualize last two points
             pj1 = pj
             pj = pol[i_max]
 
-            # Stop condition
+            # stop condition
             if pj == q:
                 break
 
         return ch
+
+    # create convex hull using Graham scan
+    def grahamScan(self, pol:QPolygonF):
+        # initialize convex hull
+        ch = QPolygonF()
+
+        # find pivot and parallel to x
+        q = min(pol, key = lambda k : k.y())
+        x_p = QPointF(q.x() + 10, q.y())
+
+        # sort points by angle
+
 
     def rotate(self, pol: QPolygonF, sig: float) -> QPolygonF:
         # rotated polygon
@@ -141,7 +163,7 @@ class Algorithms:
 
     def minAreaEnclosingRectangle(self, pol: QPolygonF):
         # create convex hull
-        ch = self.createCH(pol)
+        ch = self.jarvisScan(pol)
 
         # get minmax box and area
         mmb_min, area_min = self.minMaxBox(ch)
@@ -288,18 +310,12 @@ class Algorithms:
         len_max = 0
 
         for i in range(n):
-            # compute sigma i
-            dx_i = pol[(i + 1) % n].x() - pol[i].x()
-            dy_i = pol[(i + 1) % n].y() - pol[i].y()
-            sigma_i = atan2(dy_i, dx_i)
-
-            # compute length of the edge
-            len_e = sqrt(dx_i **2 + dy_i **2)
+            # get length of the edge
+            len_e = self.getLenght(pol[i], pol[(i + 1) % n])
 
             if len_e > len_max:
                 len_max = len_e
-                index = i
-                sigma = sigma_i
+                sigma = atan2(pol[(i + 1) % n].y() - pol[i].y(), pol[(i + 1) % n].x() - pol[i].x())
 
         # rotate building
         pol_rot = self.rotate(pol, -sigma)
