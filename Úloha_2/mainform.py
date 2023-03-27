@@ -98,6 +98,16 @@ class Ui_MainForm(object):
         self.toolBar.addAction(self.actionPrincipal_Component)
         self.toolBar.addSeparator()
         self.toolBar.addAction(self.actionClear)
+        self.label = QtWidgets.QLabel(parent=self.toolBar)
+        self.label.setGeometry(QtCore.QRect(280, 6, 120, 20))
+        self.label.setObjectName("label")
+        self.comboBox = QtWidgets.QComboBox(parent=self.toolBar)
+        self.comboBox.setGeometry(QtCore.QRect(410, 0, 100, 30))
+        self.comboBox.setToolTip("Switch convex hull algorithm")
+        self.comboBox.setLayoutDirection(QtCore.Qt.LayoutDirection.LeftToRight)
+        self.comboBox.setObjectName("comboBox")
+        self.comboBox.addItem("")
+        self.comboBox.addItem("")
 
         # connect signals to slots
         self.actionOpen.triggered.connect(self.openFile)
@@ -114,6 +124,9 @@ class Ui_MainForm(object):
     def retranslateUi(self, MainForm):
         _translate = QtCore.QCoreApplication.translate
         MainForm.setWindowTitle(_translate("MainForm", "BuildingSimplify"))
+        self.label.setText(_translate("MainForm", "Convex hull algorithm:"))
+        self.comboBox.setItemText(0, _translate("MainForm", "Jarvis Scan"))
+        self.comboBox.setItemText(1, _translate("MainForm", "Graham Scan"))
         self.menuFile.setTitle(_translate("MainForm", "File"))
         self.menuSimplify.setTitle(_translate("MainForm", "Simplify"))
         self.toolBar.setWindowTitle(_translate("MainForm", "toolBar"))
