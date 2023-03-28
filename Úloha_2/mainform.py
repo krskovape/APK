@@ -84,7 +84,7 @@ class Ui_MainForm(object):
         self.menuSimplify.addAction(self.actionWall_Average)
         self.menuSimplify.addAction(self.actionLongest_Edge)
         self.menuSimplify.addAction(self.actionWeighted_Bisector)
-        self.menuSimplify.addAction(self.actionPrincipal_Component)
+        #self.menuSimplify.addAction(self.actionPrincipal_Component)
         self.menuSimplify.addSeparator()
         self.menuSimplify.addAction(self.actionClear)
         self.menubar.addAction(self.menuFile.menuAction())
@@ -95,7 +95,7 @@ class Ui_MainForm(object):
         self.toolBar.addAction(self.actionWall_Average)
         self.toolBar.addAction(self.actionLongest_Edge)
         self.toolBar.addAction(self.actionWeighted_Bisector)
-        self.toolBar.addAction(self.actionPrincipal_Component)
+        #self.toolBar.addAction(self.actionPrincipal_Component)
         self.toolBar.addSeparator()
         self.toolBar.addAction(self.actionClear)
         self.label = QtWidgets.QLabel(parent=self.toolBar)
@@ -116,7 +116,7 @@ class Ui_MainForm(object):
         self.actionWall_Average.triggered.connect(self.simplifyWallAverage)
         self.actionLongest_Edge.triggered.connect(self.simplifyLongestEdge)
         self.actionWeighted_Bisector.triggered.connect(self.simplifyWeightedBisector)
-        self.actionPrincipal_Component.triggered.connect(self.simplifyPCAClick)
+        #self.actionPrincipal_Component.triggered.connect(self.simplifyPrincipalComponent)
         self.actionClear.triggered.connect(self.clearCanvas)
 
         self.retranslateUi(MainForm)
@@ -159,76 +159,51 @@ class Ui_MainForm(object):
         return ch
 
     def simplifyMinEnclosingRectangle(self):
-        # get polygon
+        # get polygons
         polygons = self.Canvas.getPolygons()
 
         a = Algorithms()
 
         for pol in polygons:
-
             ch = self.createCH(pol)
-            # self.Canvas.setCH(ch)
-
             er = a.minAreaEnclosingRectangle(pol, ch)
             self.Canvas.setER(er)
 
         self.Canvas.repaint()
 
     def simplifyWallAverage(self):
-        # get polygon
+        # get polygons
         polygons = self.Canvas.getPolygons()
 
         a = Algorithms()
 
         for pol in polygons:
-            ch = self.createCH(pol)
-            # self.Canvas.setCH(ch)
-
             er = a.wallAverage(pol)
             self.Canvas.setER(er)
 
         self.Canvas.repaint()
 
     def simplifyLongestEdge(self):
-        # get polygon
-        pol = self.Canvas.getPolygon()
+        # get polygons
+        polygons = self.Canvas.getPolygons()
 
         a = Algorithms()
 
-        ch = self.createCH(pol)
-        #self.Canvas.setCH(ch)
-
-        er = a.longestEdge(pol)
-        self.Canvas.setER(er)
+        for pol in polygons:
+            er = a.longestEdge(pol)
+            self.Canvas.setER(er)
 
         self.Canvas.repaint()
 
     def simplifyWeightedBisector(self):
-        # get polygon
-        pol = self.Canvas.getPolygon()
+        # get polygons
+        polygons = self.Canvas.getPolygons()
 
         a = Algorithms()
 
-        ch = self.createCH(pol)
-        self.Canvas.setCH(ch)
-
-        er = a.weightedBisector(pol)
-        self.Canvas.setER(er)
-
-        self.Canvas.repaint()
-
-    def simplifyPCAClick(self):
-        # get polygon
-        pol = self.Canvas.getPolygon()
-
-        a = Algorithms()
-
-        ch = a.jarvisScan(pol)
-        self.Canvas.setCH(ch)
-
-        er = a.principalComponent(pol)
-        self.Canvas.setER(er)
-        #a.principalComponent(pol)
+        for pol in polygons:
+            er = a.weightedBisector(pol)
+            self.Canvas.setER(er)
 
         self.Canvas.repaint()
 
