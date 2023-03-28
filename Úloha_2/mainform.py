@@ -115,6 +115,7 @@ class Ui_MainForm(object):
         self.actionMinimum_Area_Enclosing_Rectangle.triggered.connect(self.simplifyMinEnclosingRectangle)
         self.actionWall_Average.triggered.connect(self.simplifyWallAverage)
         self.actionLongest_Edge.triggered.connect(self.simplifyLongestEdge)
+        self.actionWeighted_Bisector.triggered.connect(self.simplifyWeightedBisector)
         self.actionPrincipal_Component.triggered.connect(self.simplifyPCAClick)
         self.actionClear.triggered.connect(self.clearCanvas)
 
@@ -198,6 +199,20 @@ class Ui_MainForm(object):
         #self.Canvas.setCH(ch)
 
         er = a.longestEdge(pol)
+        self.Canvas.setER(er)
+
+        self.Canvas.repaint()
+
+    def simplifyWeightedBisector(self):
+        # get polygon
+        pol = self.Canvas.getPolygon()
+
+        a = Algorithms()
+
+        ch = self.createCH(pol)
+        self.Canvas.setCH(ch)
+
+        er = a.weightedBisector(pol)
         self.Canvas.setER(er)
 
         self.Canvas.repaint()
