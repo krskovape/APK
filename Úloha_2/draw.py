@@ -13,7 +13,6 @@ class Draw(QWidget):
         self.__features = None
         self.__min_max = [0, 0, 10, 10]
         self.__no_data = False
-        self.__pol = QPolygonF()
         self.__ch = QPolygonF()
         self.__er = []
 
@@ -65,19 +64,6 @@ class Draw(QWidget):
                     p = QPointF(x, y)
                     self.__polygons[k].append(p)
 
-    # left mouse button click
-    def mousePressEvent(self, e:QMouseEvent):
-        # get cursor position
-        x = e.position().x()
-        y = e.position().y()
-
-        # add point to polygon
-        p = QPointF(x,y)
-        self.__pol.append(p)
-
-        # repaint screen
-        self.repaint()
-
     # draw polygon
     def paintEvent(self, e: QPaintEvent):
         # create graphic object
@@ -86,13 +72,7 @@ class Draw(QWidget):
         # start draw
         qp.begin(self)
 
-        # set attributes for building
-        qp.setPen(Qt.GlobalColor.black)
-        qp.setBrush(Qt.GlobalColor.white)
-
-        # draw building
-        qp.drawPolygon(self.__pol)
-
+        # draw buildings
         for index, polygon in enumerate(self.__polygons):
             # set attributes
             qp.setPen(QColor.fromString("steelblue"))
@@ -100,36 +80,25 @@ class Draw(QWidget):
             qp.drawPolygon(polygon)
 
         # set attributes for convex hull
-        qp.setPen(Qt.GlobalColor.blue)
-        qp.setBrush(Qt.GlobalColor.yellow)
+        qp.setPen(QColor.fromString("goldenrod"))
+        qp.setBrush(QColor.fromString("gold"))
 
         # draw convex hull
         qp.drawPolygon(self.__ch)
 
         for index, er in enumerate(self.__er):
             # set attributes for enclosing rectangle
-            qp.setPen(Qt.GlobalColor.red)
-            qp.setBrush(Qt.GlobalColor.green)
+            qp.setPen(QColor.fromString("green"))
+            qp.setBrush(QColor.fromString("yellowgreen"))
 
             # draw enclosing rectangle
             qp.drawPolygon(er)
         self.__er = []
 
-        # set attributes for building
-        qp.setPen(Qt.GlobalColor.black)
-        qp.setBrush(Qt.GlobalColor.transparent)
-
-        # draw building
-        qp.drawPolygon(self.__pol)
-
         # end draw
         qp.end()
 
-    # get polygon
-    def getPolygon(self):
-        return self.__pol
-
-    # set polygon as convex hull
+# set polygon as convex hull
     def setCH(self, pol: QPolygonF):
         self.__ch = pol
 
@@ -139,7 +108,6 @@ class Draw(QWidget):
 
     def cleanCanvas(self):
         self.__polygons = []
-        self.__pol = []
         self.__ch = []
         self.__er = []
         self.repaint()
