@@ -142,15 +142,18 @@ class Ui_MainForm(object):
         self.actionPrincipal_Component.setText(_translate("MainForm", "Principal Component Analysis"))
         self.actionClear.setText(_translate("MainForm", "Clear"))
 
+    # load buildings from input file
     def openFile(self):
         width = self.Canvas.frameSize().width()
         height = self.Canvas.frameSize().height()
         self.Canvas.loadData()
         self.Canvas.rescaleData(width, height)
 
+    # create convex hull using chosen algorithm
     def createCH(self, pol):
         a = Algorithms()
 
+        # check current index of comboBox and use corresponding algorithm
         if self.comboBox.currentIndex() == 0:
             ch = a.jarvisScan(pol)
         if self.comboBox.currentIndex() == 1:
@@ -158,55 +161,70 @@ class Ui_MainForm(object):
 
         return ch
 
+    # simplify building using Minimum Area Enclosing Rectangle algorithm
     def simplifyMinEnclosingRectangle(self):
         # get polygons
         polygons = self.Canvas.getPolygons()
 
         a = Algorithms()
 
+        # process all polygons
         for pol in polygons:
+            # create convex hull and enclosing rectangle
             ch = self.createCH(pol)
             er = a.minAreaEnclosingRectangle(pol, ch)
             self.Canvas.setER(er)
 
         self.Canvas.repaint()
 
+    # simplify building using Wall Average algorithm
     def simplifyWallAverage(self):
         # get polygons
         polygons = self.Canvas.getPolygons()
 
         a = Algorithms()
 
+        # process all polygons
         for pol in polygons:
+            # create enclosing rectangle
             er = a.wallAverage(pol)
             self.Canvas.setER(er)
 
         self.Canvas.repaint()
 
+    # simplify building using Longest Edge algorithm
     def simplifyLongestEdge(self):
         # get polygons
         polygons = self.Canvas.getPolygons()
 
         a = Algorithms()
 
+        # process all polygons
         for pol in polygons:
+            # create enclosing rectangle
             er = a.longestEdge(pol)
             self.Canvas.setER(er)
 
         self.Canvas.repaint()
 
+    # simplify building using Weighted Bisector algorithm
     def simplifyWeightedBisector(self):
         # get polygons
         polygons = self.Canvas.getPolygons()
 
         a = Algorithms()
 
+        # process all polygons
+        i = 0
         for pol in polygons:
+            # create enclosing rectangle
             er = a.weightedBisector(pol)
             self.Canvas.setER(er)
+            i += 1
 
         self.Canvas.repaint()
 
+    # clear all buildings and simplified polygons
     def clearCanvas(self):
         self.Canvas.cleanCanvas()
 

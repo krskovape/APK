@@ -8,34 +8,7 @@ class Algorithms:
     def __init__(self):
         pass
 
-    def getPointPolygonPosition(self, q, pol):
-        # počet průsečíků (k), number of vertices (n)
-        k = 0
-        n = len(pol)
-
-        # process all vertices
-        for i in range(n):
-            # reduce coordinates
-            xir = pol[i].x() - q.x()
-            yir = pol[i].y() - q.y()
-            # modulo (%n), abychom nepřekročili index, poslední bod bude zase ten první
-            xi1r = pol[(i+1)%n].x() - q.x()
-            yi1r = pol[(i+1)%n].y() - q.y()
-
-            # suitable segment - protnutý horizontálním paprskem, oba konce v jiných polorovinách nebo...
-            if yi1r > 0 and yir <= 0 or yir > 0 and yi1r <= 0:
-                # compute intersection
-                xm = (xi1r * yir - xir * yi1r) / (yi1r - yir)
-
-                # increment amount of intersections
-                if xm > 0:
-                    k += 1
-
-        # point is inside
-        if k % 2 == 1:
-            return True
-        return False
-
+    # compute angle between two lines
     def get2LinesAngle(self, p1: QPointF, p2: QPointF, p3: QPointF, p4: QPointF):
         # compute vectors
         ux = p2.x() - p1.x()
@@ -53,9 +26,10 @@ class Algorithms:
         arg = uv / (nu * nv)
         arg = max(min(arg, 1), -1)
 
-        # angle
+        # return angle
         return acos(arg)
 
+    # determine position of point and line
     def getPointLinePosition(self, p: QPointF, p1: QPointF, p2: QPointF):
         # compute vectors
         ux = p2.x() - p1.x()
@@ -77,7 +51,7 @@ class Algorithms:
         # colinear point
         return -1
 
-    # compute lenght between two points
+    # compute length between two points
     def getLength(self, p1: QPointF, p2: QPointF):
         # compute vectors
         dx_i = p2.x() - p1.x()
@@ -195,6 +169,7 @@ class Algorithms:
 
         return ch
 
+    # rotate polygon by angle sigma
     def rotate(self, pol: QPolygonF, sig: float) -> QPolygonF:
         # rotated polygon
         pol_rot = QPolygonF()
@@ -211,9 +186,9 @@ class Algorithms:
 
         return pol_rot
 
+    # compute MinMax Box of given polygon
     def minMaxBox(self, pol: QPolygonF):
         # find extreme coordinates
-        # fce min vrací bod s min/max souřadnicí, musíme z něj vytáhnout ještě danou souřadnici
         x_min = min(pol, key= lambda k: k.x()).x()
         x_max = max(pol, key=lambda k: k.x()).x()
         y_min = min(pol, key=lambda k: k.y()).y()
@@ -233,37 +208,7 @@ class Algorithms:
 
         return minmax_box, area
 
-    def minAreaEnclosingRectangle(self, pol: QPolygonF, ch):
-        # get minmax box and area
-        mmb_min, area_min = self.minMaxBox(ch)
-        sigma_min = 0
-
-        # process all segments of ch
-        for i in range(len(ch)-1):
-            dx = ch[i+1].x() - ch[i].x()
-            dy = ch[i+1].y() - ch[i].y()
-            sigma = atan2(dy, dx)
-
-            # rotate convex hull
-            ch_rot = self.rotate(ch, -sigma)
-
-            # find MMB of rotated convex hull
-            mmb, area = self.minMaxBox(ch_rot)
-
-            # update minimum MMB
-            if area < area_min:
-                area_min = area
-                mmb_min = mmb
-                sigma_min = sigma
-
-        # rotate MMB
-        er = self.rotate(mmb_min, sigma_min)
-
-        # resize rectangle
-        er_res = self.resizeRectangle(er, pol)
-
-        return er_res
-
+    # compute area of given polygon
     def computeArea(self, pol: QPolygonF):
         # compute area
         n = len(pol)
@@ -276,14 +221,12 @@ class Algorithms:
 
         return 0.5 * abs(area)
 
+    # resize enclosing rectangle to fit building´s area
     def resizeRectangle(self, er: QPolygonF, pol: QPolygonF):
 
         # compute area of building and enclosing rectangle
         ab = abs(self.computeArea(pol))
         a = abs(self.computeArea(er))
-
-        print(f"building: {ab}")
-        print(f"er: {a}")
 
         # fraction of building and ER area
         k = ab / a
@@ -315,11 +258,43 @@ class Algorithms:
             pol_res.append(v)
 
         ar = abs(self.computeArea(pol_res))
-        print(f"er res: {ar}")
 
         # return reduced enclosing rectangle
         return pol_res
 
+    # get simplified building using Minimum Area Enclosing Rectangle algorithm
+    def minAreaEnclosingRectangle(self, pol: QPolygonF, ch):
+        # get minmax box and area
+        mmb_min, area_min = self.minMaxBox(ch)
+        sigma_min = 0
+
+        # process all segments of ch
+        for i in range(len(ch)-1):
+            dx = ch[i+1].x() - ch[i].x()
+            dy = ch[i+1].y() - ch[i].y()
+            sigma = atan2(dy, dx)
+
+            # rotate convex hull
+            ch_rot = self.rotate(ch, -sigma)
+
+            # find MMB of rotated convex hull
+            mmb, area = self.minMaxBox(ch_rot)
+
+            # update minimum MMB
+            if area < area_min:
+                area_min = area
+                mmb_min = mmb
+                sigma_min = sigma
+
+        # rotate MMB
+        er = self.rotate(mmb_min, sigma_min)
+
+        # resize rectangle
+        er_res = self.resizeRectangle(er, pol)
+
+        return er_res
+
+    # get simplified building using Wall Average algorithm
     def wallAverage(self, pol: QPolygonF):
         # compute sigma
         dx = pol[1].x() - pol[0].x()
@@ -373,6 +348,7 @@ class Algorithms:
 
         return er_r
 
+    # get simplified building using Longest Edge algorithm
     def longestEdge(self, pol: QPolygonF):
         # process all edges
         n = len(pol)
@@ -400,6 +376,7 @@ class Algorithms:
 
         return er_r
 
+    # get simplified building using Weighted Bisector algorithm
     def weightedBisector(self, pol: QPolygonF):
         n = len(pol)
         diag_1 = [None, None, 0]

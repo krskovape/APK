@@ -8,12 +8,11 @@ class Draw(QWidget):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        # buildings, convex hull and enclosing rectangle
-        self.__polygons = []
+        # initialization of properties
         self.__features = None
         self.__min_max = [0, 0, 10, 10]
         self.__no_data = False
-        self.__ch = QPolygonF()
+        self.__polygons = []
         self.__er = []
 
     # function for loading input data
@@ -79,13 +78,6 @@ class Draw(QWidget):
             qp.setBrush(QColor.fromString("powderblue"))
             qp.drawPolygon(polygon)
 
-        # set attributes for convex hull
-        qp.setPen(QColor.fromString("goldenrod"))
-        qp.setBrush(QColor.fromString("gold"))
-
-        # draw convex hull
-        qp.drawPolygon(self.__ch)
-
         for index, er in enumerate(self.__er):
             # set attributes for enclosing rectangle
             qp.setPen(QColor.fromString("green"))
@@ -98,19 +90,16 @@ class Draw(QWidget):
         # end draw
         qp.end()
 
-# set polygon as convex hull
-    def setCH(self, pol: QPolygonF):
-        self.__ch = pol
-
     # set polygon as enclosing rectangle
     def setER(self, pol: QPolygonF):
         self.__er.append(pol)
 
-    def cleanCanvas(self):
-        self.__polygons = []
-        self.__ch = []
-        self.__er = []
-        self.repaint()
-
+    # return list of all polygons
     def getPolygons(self):
         return self.__polygons
+
+    # clear all buildings and simplified polygons
+    def cleanCanvas(self):
+        self.__polygons = []
+        self.__er = []
+        self.repaint()
