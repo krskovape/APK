@@ -80,8 +80,8 @@ class Draw(QWidget):
 
         for index, er in enumerate(self.__er):
             # set attributes for enclosing rectangle
-            qp.setPen(QColor.fromString("green"))
-            qp.setBrush(QColor.fromString("yellowgreen"))
+            qp.setPen(QColor.fromString("darkred"))
+            qp.setBrush(QColor.fromString("transparent"))
 
             # draw enclosing rectangle
             qp.drawPolygon(er)
