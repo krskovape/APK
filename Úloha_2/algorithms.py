@@ -377,75 +377,86 @@ class Algorithms:
         return er_r
 
     # get simplified building using Weighted Bisector algorithm
-    # def weightedBisector(self, pol: QPolygonF):
-    #     n = len(pol)
-    #     diag_1 = [None, None, 0]
-    #     diag_2 = [None, None, 0]
-    #
-    #     for i in range(n):
-    #         for j in range(n):
-    #             # skip computing length between the same point
-    #             if pol[i] == pol[j]:
-    #                 continue
-    #
-    #             # check if the diagonal doesn´t cross any edge
-    #             inter = True
-    #             for k in range(n):
-    #                 # compute vectors
-    #                 x1 = pol[i].x()
-    #                 y1 = pol[i].y()
-    #                 x2 = pol[j].x()
-    #                 y2 = pol[j].y()
-    #                 x3 = pol[k].x()
-    #                 y3 = pol[k].y()
-    #                 x4 = pol[(k + 1) % n].x()
-    #                 y4 = pol[(k + 1) % n].y()
-    #
-    #                 # compute determinants
-    #                 t1 = (x2 - x1) * (y4 - y1) - (x4 - x1) * (y2 - y1)
-    #                 t2 = (x2 - x1) * (y3 - y1) - (x3 - x1) * (y2 - y1)
-    #                 t3 = (x4 - x3) * (y1 - y3) - (x1 - x3) * (y4 - y3)
-    #                 t4 = (x4 - x3) * (y2 - y3) - (x2 - x3) * (y4 - y3)
-    #
-    #                 # check for the intersection
-    #                 if (t1 * t2 < 0) or (t3 * t4 < 0):
-    #                     inter = False
-    #                     break
-    #
-    #             # diagonal doesn´t cross any edge
-    #             if inter:
-    #                 # compute length of the diagonal
-    #                 s = self.getLength(pol[i], pol[j])
-    #
-    #                 # update two longest diagonals
-    #                 if s > diag_1[2]:
-    #                     diag_1[0] = pol[i]
-    #                     diag_1[1] = pol[j]
-    #                     diag_1[2] = s
-    #                 elif s > diag_2[2]:
-    #                     diag_2[0] = pol[i]
-    #                     diag_2[1] = pol[j]
-    #                     diag_2[2] = s
-    #
-    #     # compute angles for diagonals
-    #     sigma_1 = atan2(diag_1[1].y() - diag_1[1].y(), diag_1[1].x() - diag_1[1].x())
-    #     sigma_2 = atan2(diag_2[1].y() - diag_2[1].y(), diag_2[1].x() - diag_2[1].x())
-    #
-    #     # compute angle for rotation of the building
-    #     s1 = diag_1[2]
-    #     s2 = diag_2[2]
-    #     sigma = (s1 * sigma_1 + s2 * sigma_2) / (s1 + s2)
-    #
-    #     # rotate building
-    #     pol_rot = self.rotate(pol, -sigma)
-    #
-    #     # find MMB of rotated building
-    #     mmb, area = self.minMaxBox(pol_rot)
-    #
-    #     # rotate MMB
-    #     er = self.rotate(mmb, sigma)
-    #
-    #     # resize building
-    #     er_r = self.resizeRectangle(er, pol)
-    #
-    #     return er_r
+    def weightedBisector(self, pol: QPolygonF):
+        n = len(pol)
+        diag_1 = [None, None, 0]
+        diag_2 = [None, None, 0]
+
+        for i in range(n):
+            for j in range(n):
+                # skip computing length between the same point
+                if pol[i] == pol[j]:
+                    continue
+
+                # check if the diagonal doesn´t cross any edge
+                inter = True
+                for k in range(n):
+                    # skip if the diagonal is same as the edge
+                    if ((pol[i] == pol[k]) and (pol[j] == pol[(k + 1) % n])) or ((pol[j] == pol[k]) and (pol[i] == pol[(k + 1) % n])):
+                        continue
+
+                    # compute vectors
+                    x1 = pol[i].x()
+                    y1 = pol[i].y()
+                    x2 = pol[j].x()
+                    y2 = pol[j].y()
+                    x3 = pol[k].x()
+                    y3 = pol[k].y()
+                    x4 = pol[(k + 1) % n].x()
+                    y4 = pol[(k + 1) % n].y()
+
+                    # compute determinants
+                    t1 = (x2 - x1) * (y4 - y1) - (x4 - x1) * (y2 - y1)
+                    t2 = (x2 - x1) * (y3 - y1) - (x3 - x1) * (y2 - y1)
+                    t3 = (x4 - x3) * (y1 - y3) - (x1 - x3) * (y4 - y3)
+                    t4 = (x4 - x3) * (y2 - y3) - (x2 - x3) * (y4 - y3)
+
+                    # check for the intersection
+                    if (t1 * t2 < 0) or (t3 * t4 < 0):
+                        inter = False
+                        break
+
+                # diagonal doesn´t cross any edge
+                if inter:
+                    # compute length of the diagonal
+                    s = self.getLength(pol[i], pol[j])
+
+                    # update two longest diagonals
+                    if s > diag_1[2]:
+                        diag_1[0] = pol[i]
+                        diag_1[1] = pol[j]
+                        diag_1[2] = s
+                    elif s > diag_2[2]:
+                        diag_2[0] = pol[i]
+                        diag_2[1] = pol[j]
+                        diag_2[2] = s
+
+        # use first two edges if no diagonals exist
+        if (diag_1 == [None, None, 0]) or (diag_2 == [None, None, 0]):
+            s1 = self.getLength(pol[0], pol[1])
+            s2 = self.getLength(pol[1], pol[2])
+            diag_1 = [pol[0], pol[1], s1]
+            diag_2 = [pol[1], pol[2], s2]
+
+        # compute angles for diagonals
+        sigma_1 = atan2(diag_1[1].y() - diag_1[0].y(), diag_1[1].x() - diag_1[0].x())
+        sigma_2 = atan2(diag_2[1].y() - diag_2[0].y(), diag_2[1].x() - diag_2[0].x())
+
+        # compute angle for rotation of the building
+        s1 = diag_1[2]
+        s2 = diag_2[2]
+        sigma = (s1 * sigma_1 + s2 * sigma_2) / (s1 + s2)
+
+        # rotate building
+        pol_rot = self.rotate(pol, -sigma)
+
+        # find MMB of rotated building
+        mmb, area = self.minMaxBox(pol_rot)
+
+        # rotate MMB
+        er = self.rotate(mmb, sigma)
+
+        # resize building
+        er_r = self.resizeRectangle(er, pol)
+
+        return er_r

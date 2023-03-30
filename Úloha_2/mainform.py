@@ -94,7 +94,7 @@ class Ui_MainForm(object):
         self.toolBar.addAction(self.actionMinimum_Area_Enclosing_Rectangle)
         self.toolBar.addAction(self.actionWall_Average)
         self.toolBar.addAction(self.actionLongest_Edge)
-        #self.toolBar.addAction(self.actionWeighted_Bisector)
+        self.toolBar.addAction(self.actionWeighted_Bisector)
         #self.toolBar.addAction(self.actionPrincipal_Component)
         self.toolBar.addSeparator()
         self.toolBar.addAction(self.actionClear)
@@ -115,7 +115,7 @@ class Ui_MainForm(object):
         self.actionMinimum_Area_Enclosing_Rectangle.triggered.connect(self.simplifyMinEnclosingRectangle)
         self.actionWall_Average.triggered.connect(self.simplifyWallAverage)
         self.actionLongest_Edge.triggered.connect(self.simplifyLongestEdge)
-        #self.actionWeighted_Bisector.triggered.connect(self.simplifyWeightedBisector)
+        self.actionWeighted_Bisector.triggered.connect(self.simplifyWeightedBisector)
         #self.actionPrincipal_Component.triggered.connect(self.simplifyPrincipalComponent)
         self.actionClear.triggered.connect(self.clearCanvas)
 
@@ -124,7 +124,7 @@ class Ui_MainForm(object):
 
     def retranslateUi(self, MainForm):
         _translate = QtCore.QCoreApplication.translate
-        MainForm.setWindowTitle(_translate("MainForm", "BuildingSimplify"))
+        MainForm.setWindowTitle(_translate("MainForm", "Building Simplify"))
         self.label.setText(_translate("MainForm", "Convex hull algorithm:"))
         self.comboBox.setItemText(0, _translate("MainForm", "Jarvis Scan"))
         self.comboBox.setItemText(1, _translate("MainForm", "Graham Scan"))
@@ -208,21 +208,21 @@ class Ui_MainForm(object):
         self.Canvas.repaint()
 
     # simplify building using Weighted Bisector algorithm
-    # def simplifyWeightedBisector(self):
-    #     # get polygons
-    #     polygons = self.Canvas.getPolygons()
-    #
-    #     a = Algorithms()
-    #
-    #     # process all polygons
-    #     i = 0
-    #     for pol in polygons:
-    #         # create enclosing rectangle
-    #         er = a.weightedBisector(pol)
-    #         self.Canvas.setER(er)
-    #         i += 1
-    #
-    #     self.Canvas.repaint()
+    def simplifyWeightedBisector(self):
+        # get polygons
+        polygons = self.Canvas.getPolygons()
+
+        a = Algorithms()
+
+        # process all polygons
+        i = 0
+        for pol in polygons:
+            # create enclosing rectangle
+            er = a.weightedBisector(pol)
+            self.Canvas.setER(er)
+            i += 1
+
+        self.Canvas.repaint()
 
     # clear all buildings and simplified polygons
     def clearCanvas(self):
