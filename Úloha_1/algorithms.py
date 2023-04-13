@@ -115,10 +115,6 @@ class Algorithms:
                 # point lies on the vertex
                 return -1
 
-            # check for the horizontal edge
-            if (yi1r - yir) == 0:
-                continue
-
             # compute intersection
             xm = (xi1r * yir - xir * yi1r) / (yi1r - yir)
 
