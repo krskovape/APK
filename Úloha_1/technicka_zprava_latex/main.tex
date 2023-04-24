@@ -68,8 +68,8 @@
 \noindent Polygony budou načítány z textového souboru ve Vámi zvoleném formátu. Pro datovou reprezentaci jednotlivých polygonů použijte špagetový model.
 
 \vspace{1cm}
-\subsection*{\textbf{Hodnocení:}}
-
+\subsection*{\textbf{Hodnocení}}
+V rámci tohoto programu byly řešeny následující bonusové úlohy:
 \begin{center}
 \begin{tabular}{|l|l|}
 \hline
@@ -121,7 +121,7 @@ d=\begin{vmatrix} q_x & q_y \\ v_x & v_y  \end{vmatrix}=
 
 \noindent V případě, že se bod $q$ nachází v levé polorovině ($\sigma_l$), je úhel orientován ve směru hodinových ručiček. U pravé poloviny ($\sigma_r$) je to naopak, výsledná hodnota $\Omega$ vychází záporně. Výsledek je poté uváděn jako počet oběhů, tedy v násobcích $2 \pi$ (Martín, Zapata 2012).  
 
-Výhodou $Winding Number Algoritmu$ je jeho lepší ošetření v singulárních případech, oproti paprskovému algoritmu. Zároveň je však pomalejší a problém nastává, když je poloha hledaného bodu totožná s polohou jednoho z bodů tvořící mnohoúhelník (Martín, Zapata 2012). 
+Výhodou \textit{Winding Number Algoritmu} je jeho lepší ošetření v singulárních případech, oproti paprskovému algoritmu. Zároveň je však pomalejší a problém nastává, když je poloha hledaného bodu totožná s polohou jednoho z bodů tvořící mnohoúhelník (Martín, Zapata 2012). 
 
 % pseudokód winding number
 \subsubsection*{Pseudokód metody Winding Number}
@@ -173,12 +173,9 @@ V případě, že se počet průsečíků $k_l$ a $k_r$ s polopřímkami $r_1$ 
         \State \indent vypočti nové (redukované) souřadnice $x_{ir}, y_{ir}$, $x_{i+1r}, y_{i+1r}$\\
         
         \State \indent \textbf{pokud} $x_{ir} = 0$ a $y_{ir} = 0$
-        \State \indent \indent $q$ je totožný s vrcholem
-
-        \State \indent \textbf{pokud} $y_{i+1r} - y_{ir}$ = 0 (horizontální hrana)
-        \State \indent \indent jdi na další uzel\\
-
-        \State \indent vypočti $x$ souřadnice průsečíku $x_m$ 
+        \State \indent \indent $q$ je totožný s vrcholem 
+        \State \indent vypočti $x$ souřadnice průsečíku $x_m$ \\
+        
         % levá přímka r_2
         \State \indent \textbf{pokud} $(y_i < 0) \neq (y_{i+1}<0)$ (levostranný paprsek)
         \State \indent \indent \textbf{pokud} $x_m<0$:
@@ -199,7 +196,7 @@ V případě, že se počet průsečíků $k_l$ a $k_r$ s polopřímkami $r_1$ 
 
 % APLIKACE
 \subsection*{Aplikace}
-Aplikace pro analýzu polohy bodu vzhledem k polygonu byla vytvořena v prostředí $Qt Creator$ a jsou v ní implementovány oba výše popsané algoritmy – $Winding Number$ i $Ray Crossing$.
+Aplikace pro analýzu polohy bodu vzhledem k polygonu byla vytvořena v prostředí \textit{Qt Creator} a jsou v ní implementovány oba výše popsané algoritmy – \textit{Winding Number} i \textit{Ray Crossing}.
 
 Po spuštění aplikace přes soubor $mainform.py$ je otevřeno okno, jehož většinu tvoří prázdná plocha pro vykreslení polygonů. V horní části se pak nachází menu s jednotlivými funkcemi. V záložce $File$  je možné pomocí funkce $Open$ vyvolat dialogové okno a vybrat vstupní data ve formátu $.shp$, která jsou následně vykreslena (viz obr. 1). Možnost $Exit$ pak slouží k zavření aplikace. 
 
@@ -209,9 +206,9 @@ Po spuštění aplikace přes soubor $mainform.py$ je otevřeno okno, jehož vě
     \textit{\caption{ukázka aplikace}}
 \end{figure}
 
-Kliknutím do okna je vykreslen bod, jehož poloha vůči polygonu je zanalyzována po výběru funkce $Point In Polygon$ v záložce $Analyze$. Následně je zvýrazněn polygon, ve kterém bod leží (viz obr. 2), v případě umístění bodu na hranu či vrchol, jsou vykresleny všechny polygony, kterým daná hrana nebo vrchol náleží (viz obr. 3). V pravé části menu je pomocí rozbalovacího seznamu možné vybrat, který algoritmus má být pro analýzu využit. Při zvětšení okna aplikace je možné přizpůsobit zobrazení dat funkcí $Fit To Display$ v záložce $Edit$. Možností $Clear$ jsou pak vymazány nahrané polygony.
+Kliknutím do okna je vykreslen bod, jehož poloha vůči polygonu je zanalyzována po výběru funkce \textit{Point In Polygon} v záložce $Analyze$. Následně je zvýrazněn polygon, ve kterém bod leží (viz obr. 2), v případě umístění bodu na hranu či vrchol, jsou vykresleny všechny polygony, kterým daná hrana nebo vrchol náleží (viz obr. 3). V pravé části menu je pomocí rozbalovacího seznamu možné vybrat, který algoritmus má být pro analýzu využit. Při zvětšení okna aplikace je možné přizpůsobit zobrazení dat funkcí \textit{Fit To Display} v záložce $Edit$. Možností $Clear$ jsou pak vymazány nahrané polygony.
 
-Popsané funkce je možné vyvolat i pomocí ikon umístěnými pod záložkami menu, v pořadí zleva se jedná o funkce $Insert file$, $Analyze point and polygon position$, $Clear$ a $Fit to display$. Ikony odpovídají jednotlivým funkcím v záložkách menu a po umístění kurzoru myši na ikonu je vypsán i název odpovídající funkce.
+Popsané funkce je možné vyvolat i pomocí ikon umístěnými pod záložkami menu, v pořadí zleva se jedná o funkce \textit{Insert file}, \textit{Analyze point and polygon position}, $Clear$ a \textit{Fit to display}. Ikony odpovídají jednotlivým funkcím v záložkách menu a po umístění kurzoru myši na ikonu je vypsán i název odpovídající funkce.
 
 \begin{figure}
     \centering
@@ -269,13 +266,13 @@ Tato třída v sobě implementuje algoritmy pro analýzu polohy bodu a polygonu.
 
 \noindent Metoda $getAngle$ má jako vstupní parametry analyzovaný bod $q$ a body $p1$ a $p2$ tvořící hranu polygonu a slouží k určení úhlu mezi bodem a koncovými body hrany. Nejprve jsou spočítány vektory mezi bodem $q$ a krajními body hrany. Následně je vypočítán jejich skalární součin a norma obou vektorů. Pokud je jedna z norem vektorů nulová, bod $q$ je shodný s bodem hrany a metoda vrátí hodnotu 0. Pro správnou funkčnost funkce $acos$ je zkontrolováno, zda není vypočítaná hodnota cosinu větší než 1 nebo menší než -1 a případně je na tuto hodnotu zaokrouhlena a metoda vrací hodnotu úhlu. Jinak dochází k výpočtu úhlu a navrácení jeho hodnoty.
 
-\noindent Metoda $windingNumber$ má jako vstupní argumenty analyzovaný bod $q$ a polygon, vůči kterému se analyzuje poloha bodu a implementuje metodu $Winding Number$. Nejprve dochází k inicializaci proměnné pro součet úhlů a tolerance $epsilon$ a následně dochází k procházení všech vrcholů polygonu. Pokud se obě souřadnice vrcholu rovnají souřadnicím bodu, znamená to, že bod leží na vrcholu polygonu a metoda vrátí hodnotu -1. Jinak je pomocí dvou předchozích metod určena poloha bodu vůči hraně polygonu a úhel. Pokud bod leží v levé polorovině, vypočítaný úhel je připočten k sumě úhlů. Pokud se bod nachází v pravé polorovině, je úhel od této sumy odečten. V ostatních případech bod leží na přímce, která prochází hranou. Pomocí vektorů mezi bodem a krajními body hrany dochází k ověření, zda bod leží mezi nimi a tím pádem na hraně a při splnění této podmínky metoda vrátí hodnotu -1. Jinak je zkontrolováno, zda je rozdíl sumy úhlů od $2\pi$ menší než definovaná tolerance a pokud ano, bod leží v polygonu a metoda vrátí hodnotu 1. V opačném případě bod leží mimo polygon a metoda vrátí hodnotu 0.
+\noindent Metoda $windingNumber$ má jako vstupní argumenty analyzovaný bod $q$ a polygon, vůči kterému se analyzuje poloha bodu a implementuje metodu \textit{Winding Number}. Nejprve dochází k inicializaci proměnné pro součet úhlů a tolerance $epsilon$ a následně dochází k procházení všech vrcholů polygonu. Pokud se obě souřadnice vrcholu rovnají souřadnicím bodu, znamená to, že bod leží na vrcholu polygonu a metoda vrátí hodnotu -1. Jinak je pomocí dvou předchozích metod určena poloha bodu vůči hraně polygonu a úhel. Pokud bod leží v levé polorovině, vypočítaný úhel je připočten k sumě úhlů. Pokud se bod nachází v pravé polorovině, je úhel od této sumy odečten. V ostatních případech bod leží na přímce, která prochází hranou. Pomocí vektorů mezi bodem a krajními body hrany dochází k ověření, zda bod leží mezi nimi a tím pádem na hraně. Ověření je založeno na předpokladu, že bod leží mezi krajními body v případě, že vektory mají opačnou orientaci a jejich součin je tak záporný. To je ověřeno pro x-ové i y-ové souřadnice a při splnění podmínky metoda vrátí hodnotu -1. Jinak je zkontrolováno, zda je rozdíl sumy úhlů od $2\pi$ menší než definovaná tolerance a pokud ano, bod leží v polygonu a metoda vrátí hodnotu 1. V opačném případě bod leží mimo polygon a metoda vrátí hodnotu 0.
 
-\noindent Metoda $rayCrossing$ má jako vstupní argumenty analyzovaný bod $q$ a polygon, vůči kterému se analyzuje poloha bodu a implementuje metodu $Ray Crossing$ s redukcí souřadnic k bodu $q$ a dvěma paprsky pro detekci bodu na hraně. Nejprve jsou inicializovány proměnné udržující počet levých a pravých průsečíků a počet vrcholů polygonu. Dále jsou procházeny všechny vrcholy polygonu a pro vrcholy tvořící hranu jsou redukovány souřadnice k bodu $q$. Pokud jsou redukované souřadnice prvního bodu nulové, znamená to, že bod leží na tomto vrcholu a metoda vrátí hodnotu -1. V případě nulového rozdílu mezi ypsilonovými souřadnicemi vrcholů se jedná o horizontální hranu a dochází ke skoku na další hranu polygonu. Následně dochází ke kontrole, zda se jedná o levostranný či pravostranný paprsek a k výpočtu průsečíku. Pokud průsečík splňuje zadanou podmínku, je inkrementována příslušná proměnná. V případě, že se počet levostranných a pravostranných průsečíků nerovná, bod leží na hraně a metoda vrátí hodnotu -1. Pokud je počet pravostranných průsečíků lichý, bod leží uvnitř polygonu a dojde k navrácení hodnoty 1. V ostatních případech bod leží mimo polygon a metoda vrátí hodnotu 0.
+\noindent Metoda $rayCrossing$ má jako vstupní argumenty analyzovaný bod $q$ a polygon, vůči kterému se analyzuje poloha bodu a implementuje metodu \textit{Ray Crossing} s redukcí souřadnic k bodu $q$ a dvěma paprsky pro detekci bodu na hraně. Nejprve jsou inicializovány proměnné udržující počet levých a pravých průsečíků a počet vrcholů polygonu. Dále jsou procházeny všechny vrcholy polygonu a pro vrcholy tvořící hranu jsou redukovány souřadnice k bodu $q$. Pokud jsou redukované souřadnice prvního bodu nulové, znamená to, že bod leží na tomto vrcholu a metoda vrátí hodnotu -1. V případě nulového rozdílu mezi ypsilonovými souřadnicemi vrcholů se jedná o horizontální hranu a dochází ke skoku na další hranu polygonu. Následně dochází ke kontrole, zda se jedná o levostranný či pravostranný paprsek a k výpočtu průsečíku. Pokud průsečík splňuje zadanou podmínku, je inkrementována příslušná proměnná. V případě, že se počet levostranných a pravostranných průsečíků nerovná, bod leží na hraně a metoda vrátí hodnotu -1. Pokud je počet pravostranných průsečíků lichý, bod leží uvnitř polygonu a dojde k navrácení hodnoty 1. V ostatních případech bod leží mimo polygon a metoda vrátí hodnotu 0.
 
 % ZÁVĚR
 \subsection*{Závěr}
-V rámci této úlohy byla vytvořena aplikace která na základě uživatelem zvoleného algoritmu ($Winding$ $Number$ nebo $Ray$ $Crossing$) analyzuje polohu zvoleného bodu vůči daným polygonům včetně ošetření singularit, a sice, že je bod totožný s vrcholem nebo hranou polygonu. 
+V rámci této úlohy byla vytvořena aplikace která na základě uživatelem zvoleného algoritmu (\textit{Winding Number} nebo \textit{Ray Crossing}) analyzuje polohu zvoleného bodu vůči daným polygonům včetně ošetření singularit, a sice, že je bod totožný s vrcholem nebo hranou polygonu. 
 
 Možným zlepšením aplikace by bylo jiné ošetření zavření dialogového okna při načítání vstupních dat bez vybrání souboru. Momentálním řešením je tvorba skrytého polygonu mimo plochu pro vykreslení polygonů. Při prvním načítání vstupních dat nebo po vyčištění plochy funkcí $Clear$ se nic nestane a plocha zůstane prázdná, při zavření dialogového okna v případě, že jsou v aplikaci vykresleny polygony, ale dojde k jejich vymazání. Možnou úpravou by bylo zachování těchto vykreslených polygonů.
 
