@@ -209,6 +209,7 @@ class Algorithms:
 
         return contours
 
+    # compute normal vector of triangle
     def getNomrVector(self, p1: QPoint3DF, p2: QPoint3DF, p3: QPoint3DF):
         # first vector
         ux = p2.x() - p1.x()
@@ -226,29 +227,6 @@ class Algorithms:
         nz = ux * vy - uy * vx
 
         return nx, ny, nz
-
-    # get triangle slope
-    # def getSlope(self, p1: QPoint3DF, p2: QPoint3DF, p3: QPoint3DF):
-    #     # first vector
-    #     ux = p2.x() - p1.x()
-    #     uy = p2.y() - p1.y()
-    #     uz = p2.getZ() - p1.getZ()
-    #
-    #     # second vector
-    #     vx = p3.x() - p1.x()
-    #     vy = p3.y() - p1.y()
-    #     vz = p3.getZ() - p1.getZ()
-    #
-    #     # normal vector components
-    #     nx = uy * vz - uz * vy
-    #     ny = -(ux * vz - uz * vx)
-    #     nz = ux * vy - uy * vx
-    #
-    #     # norm
-    #     n = sqrt(nx*nx + ny*ny + nz*nz)
-    #
-    #     # return slope
-    #     return acos(nz / n)
 
     def getSlope(self, p1: QPoint3DF, p2: QPoint3DF, p3: QPoint3DF):
         #get normal vector
@@ -273,7 +251,7 @@ class Algorithms:
 
         return aspect
 
-
+    # analyze slope of triangles
     def analyzeDTMSlope(self, dt: list[Edge]):
         dtm: list[Triangle] = []
 
@@ -288,7 +266,28 @@ class Algorithms:
             slope = self.getSlope(p1, p2, p3)
 
             # create triangle and add it to list
-            triangle = Triangle(p1, p2, p3, slope, 0)
+            triangle = Triangle(p1, p2, p3, slope, -1)
+            dtm.append(triangle)
+
+        # return analyzed DTM
+        return dtm
+
+    # analyze aspect of triangles
+    def analyzeDTMAspect(self, dt: list[Edge]):
+        dtm: list[Triangle] = []
+
+        # process all triangles
+        for i in range(0, len(dt), 3):
+            # get triangle vertices
+            p1 = dt[i].getStart()
+            p2 = dt[i].getEnd()
+            p3 = dt[i+1].getEnd()
+
+            # compute slope
+            aspect = self.getAspect(p1, p2, p3)
+
+            # create triangle and add it to list
+            triangle = Triangle(p1, p2, p3, -1, aspect)
             dtm.append(triangle)
 
         # return analyzed DTM

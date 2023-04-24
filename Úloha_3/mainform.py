@@ -54,11 +54,11 @@ class Ui_MainForm(object):
         icon2.addPixmap(QtGui.QPixmap("icons/slope2.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         self.actionAnalyse_slope.setIcon(icon2)
         self.actionAnalyse_slope.setObjectName("actionAnalyse_slope")
-        self.actionAnalyse_ascpect = QtGui.QAction(parent=MainForm)
+        self.actionAnalyse_aspect = QtGui.QAction(parent=MainForm)
         icon3 = QtGui.QIcon()
         icon3.addPixmap(QtGui.QPixmap("icons/orientation2.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
-        self.actionAnalyse_ascpect.setIcon(icon3)
-        self.actionAnalyse_ascpect.setObjectName("actionAnalyse_ascpect")
+        self.actionAnalyse_aspect.setIcon(icon3)
+        self.actionAnalyse_aspect.setObjectName("actionAnalyse_aspect")
         self.actionOpen_2 = QtGui.QAction(parent=MainForm)
         icon4 = QtGui.QIcon()
         icon4.addPixmap(QtGui.QPixmap("icons/open_file.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
@@ -87,7 +87,7 @@ class Ui_MainForm(object):
         self.menuAnalysis.addAction(self.actionCreate_DT)
         self.menuAnalysis.addAction(self.actionCreate_contour_lines)
         self.menuAnalysis.addAction(self.actionAnalyse_slope)
-        self.menuAnalysis.addAction(self.actionAnalyse_ascpect)
+        self.menuAnalysis.addAction(self.actionAnalyse_aspect)
         self.menuSettings.addAction(self.actionParameters)
         self.menuView.addAction(self.actionClear_results)
         self.menuView.addAction(self.actionClear_all)
@@ -100,7 +100,7 @@ class Ui_MainForm(object):
         self.toolBar.addAction(self.actionCreate_DT)
         self.toolBar.addAction(self.actionCreate_contour_lines)
         self.toolBar.addAction(self.actionAnalyse_slope)
-        self.toolBar.addAction(self.actionAnalyse_ascpect)
+        self.toolBar.addAction(self.actionAnalyse_aspect)
         self.toolBar.addSeparator()
         self.toolBar.addAction(self.actionParameters)
         self.toolBar.addSeparator()
@@ -113,6 +113,7 @@ class Ui_MainForm(object):
         self.actionCreate_DT.triggered.connect(self.runDT)
         self.actionCreate_contour_lines.triggered.connect(self.runContourLines)
         self.actionAnalyse_slope.triggered.connect(self.runSlope)
+        self.actionAnalyse_aspect.triggered.connect(self.runAspect)
 
         self.retranslateUi(MainForm)
         QtCore.QMetaObject.connectSlotsByName(MainForm)
@@ -130,8 +131,8 @@ class Ui_MainForm(object):
         self.actionCreate_contour_lines.setText(_translate("MainForm", "Create contour lines"))
         self.actionAnalyse_slope.setText(_translate("MainForm", "Analyse slope"))
         self.actionAnalyse_slope.setToolTip(_translate("MainForm", "Analyse slope of DTM triangles"))
-        self.actionAnalyse_ascpect.setText(_translate("MainForm", "Analyse ascpect"))
-        self.actionAnalyse_ascpect.setToolTip(_translate("MainForm", "Analyse ascpect od DTM"))
+        self.actionAnalyse_aspect.setText(_translate("MainForm", "Analyse ascpect"))
+        self.actionAnalyse_aspect.setToolTip(_translate("MainForm", "Analyse ascpect od DTM"))
         self.actionOpen_2.setText(_translate("MainForm", "Open"))
         self.actionOpen_2.setToolTip(_translate("MainForm", "Open file"))
         self.actionExit.setText(_translate("MainForm", "Exit"))
@@ -175,7 +176,17 @@ class Ui_MainForm(object):
         a = Algorithms()
         dtm = a.analyzeDTMSlope(dt)
 
-        self.Canvas.setSlope(dtm)
+        self.Canvas.setTriangles(dtm)
+        self.Canvas.repaint()
+
+    def runAspect(self):
+        # get DT
+        dt = self.Canvas.getDT()
+
+        a = Algorithms()
+        dtm = a.analyzeDTMAspect(dt)
+
+        self.Canvas.setTriangles(dtm)
         self.Canvas.repaint()
 
 

@@ -100,23 +100,38 @@ class Draw(QWidget):
         for p in self.__points:
             qp.drawEllipse(int(p.x() - d / 2), int(p.y() - d / 2), d, d)
 
-        # draw aspect
+        # draw slope or aspect
         k = 510 / pi
 
         # process all triangles
         for t in self.__triangles:
-            # get slope
+            # get slope and aspect
             slope = t.getSlope()
+            aspect = t.getAspect()
 
-            # convert to color
-            col = 255 - int(slope * k)
+            # draw slope
+            if aspect == -1:
+                # convert to color
+                col = 255 - int(slope * k)
 
-            # create color
-            color = QColor(col, col, col)
-            qp.setBrush(color)
+                # create color
+                color = QColor(col, col, col)
+                qp.setBrush(color)
 
-            # create new polygon
-            pol = QPolygonF([t.getP1(), t.getP2(), t.getP3()])
+                # create new polygon
+                pol = QPolygonF([t.getP1(), t.getP2(), t.getP3()])
+
+            # draw aspect
+            else:
+                # get aspect color
+                col1, col2, col3 = self.getAspectColor(aspect)
+
+                # create color
+                color = QColor(col1, col2, col3)
+                qp.setBrush(color)
+
+                # create new polygon
+                pol = QPolygonF([t.getP1(), t.getP2(), t.getP3()])
 
             # draw polygon
             qp.drawPolygon(pol)
@@ -146,7 +161,7 @@ class Draw(QWidget):
     def setContours(self, contours: list[Edge]):
         self.__contours = contours
 
-    def setSlope(self, dtm: list[Triangle]):
+    def setTriangles(self, dtm: list[Triangle]):
         self.__triangles = dtm
 
     def getPoints(self):
