@@ -169,3 +169,16 @@ class Draw(QWidget):
 
     def getDT(self):
         return self.__dt
+
+    def clearAll(self):
+        self.__points: list[QPoint3DF] = []
+        self.__dt: list[Edge] = []
+        self.__contours: list[Edge] = []
+        self.__triangles: list[Triangle] = []
+        self.repaint()
+
+    def clearResults(self):
+        self.__dt: list[Edge] = []
+        self.__contours: list[Edge] = []
+        self.__triangles: list[Triangle] = []
+        self.repaint()

@@ -114,6 +114,9 @@ class Ui_MainForm(object):
         self.actionCreate_contour_lines.triggered.connect(self.runContourLines)
         self.actionAnalyse_slope.triggered.connect(self.runSlope)
         self.actionAnalyse_aspect.triggered.connect(self.runAspect)
+        self.actionClear_all.triggered.connect(self.clearAll)
+        self.actionClear_results.triggered.connect(self.clearResults)
+        self.actionExit.triggered.connect(sys.exit)
 
         self.retranslateUi(MainForm)
         QtCore.QMetaObject.connectSlotsByName(MainForm)
@@ -188,6 +191,12 @@ class Ui_MainForm(object):
 
         self.Canvas.setTriangles(dtm)
         self.Canvas.repaint()
+
+    def clearAll(self):
+        self.Canvas.clearAll()
+
+    def clearResults(self):
+        self.Canvas.clearResults()
 
 
 if __name__ == "__main__":
