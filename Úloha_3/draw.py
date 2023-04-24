@@ -32,6 +32,57 @@ class Draw(QWidget):
         # repaint screen
         self.repaint()
 
+    def getAspectColor(self, aspect):
+        # North
+        if ((aspect >= 0) and (aspect < pi/8)) or ((aspect >= 15*pi/8) and (aspect < 2*pi)):
+            col1= 132
+            col2 = 214
+            col3 = 0
+
+        # Northwest
+        elif (aspect >= pi/8) and (aspect < 3*pi/8):
+            col1 = 244
+            col2 = 250
+            col3 = 0
+
+        # West
+        elif (aspect >= 3*pi/8) and (aspect < 5*pi/8):
+            col1 = 255
+            col2 = 171
+            col3 = 71
+
+        # Southwest
+        elif (aspect >= 5*pi/8) and (aspect < 7*pi/8):
+            col1 = 255
+            col2 = 85
+            col3 = 104
+
+        # South
+        elif (aspect >= 7*pi/8) and (aspect < 9*pi/8):
+            col1 = 202
+            col2 = 0
+            col3 = 156
+
+        # Southeast
+        elif (aspect >= 9*pi/8) and (aspect < 11*pi/8):
+            col1 = 108
+            col2 = 0
+            col3 = 163
+
+        # East
+        elif (aspect >= 11*pi/8) and (aspect < 13*pi/8):
+            col1 = 0
+            col2 = 104
+            col3 = 192
+
+        # Northeast
+        elif (aspect >= 13*pi/8) and (aspect < 15*pi/8):
+            col1 = 0
+            col2 = 171
+            col3 = 68
+
+        return col1, col2, col3
+
     # draw polygon
     def paintEvent(self, e: QPaintEvent):
         # create graphic object
