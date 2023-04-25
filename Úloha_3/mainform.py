@@ -169,6 +169,7 @@ class Ui_MainForm(object):
         height = self.Canvas.frameSize().height()
         self.Canvas.loadData(width, height)
 
+    # create Delaunay triangulation
     def runDT(self):
         points = self.Canvas.getPoints()
 
@@ -179,6 +180,7 @@ class Ui_MainForm(object):
         self.Canvas.setDT(dt)
         self.Canvas.repaint()
 
+    # create contour lines
     def runContourLines(self):
         # get DT
         dt = self.Canvas.getDT()
@@ -191,6 +193,7 @@ class Ui_MainForm(object):
         self.Canvas.setContours(contours, emph_contours)
         self.Canvas.repaint()
 
+    # analyze slope of triangles
     def runSlope(self):
         # get DT
         dt = self.Canvas.getDT()
@@ -201,6 +204,7 @@ class Ui_MainForm(object):
         self.Canvas.setTriangles(dtm)
         self.Canvas.repaint()
 
+    # analyze aspect of triangles
     def runAspect(self):
         # get DT
         dt = self.Canvas.getDT()
@@ -229,9 +233,11 @@ class Ui_MainForm(object):
         if ok:
             self.__contours_step = step
 
+    # clear points and all results
     def clearAll(self):
         self.Canvas.clearAll()
 
+    # clear results
     def clearResults(self):
         self.Canvas.clearResults()
 

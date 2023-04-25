@@ -9,7 +9,6 @@ from math import pi
 import csv
 
 class Draw(QWidget):
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -26,7 +25,7 @@ class Draw(QWidget):
         filename = QFileDialog.getOpenFileName(self, "Open file", "", "*.txt")
         path = filename[0]
 
-        # update no data property to draw hidden polygon if dialog window is closed
+        # return empty list of points if dialog window is closed
         if bool(filename[0]) == False:
             self.__points = []
             return self.__points
@@ -39,7 +38,7 @@ class Draw(QWidget):
         # read file
         with open(path, "r") as f:
             for row in csv.reader(f, delimiter='\t'):
-                # extract coordinates
+                # extract coordinates and convert them to float
                 x_list.append(float(row[0]))
                 y_list.append(float(row[1]))
                 z_list.append(float(row[2]))
@@ -47,7 +46,7 @@ class Draw(QWidget):
         # get min and max x, y coordinates
         min_max = [min(x_list), min(y_list), max(x_list), max(y_list)]
 
-        # rescale data
+        # rescale data to fit the window of application
         for i in range(len(x_list)):
             x = int(((x_list[i] - min_max[0]) / (min_max[2] - min_max[0]) * width))
             y = int((height - (y_list[i] - min_max[1]) / (min_max[3] - min_max[1]) * (height)))
@@ -68,6 +67,7 @@ class Draw(QWidget):
         # repaint screen
         self.repaint()
 
+    # get aspect color
     def getAspectColor(self, aspect):
         # North
         if (aspect >= 11*pi/8) and (aspect < 13*pi/8):
@@ -104,7 +104,7 @@ class Draw(QWidget):
         else:
             return QColor(255, 255, 255)
 
-    # draw polygon
+    # draw points and analyses of DTM
     def paintEvent(self, e: QPaintEvent):
         # create graphic object
         qp = QPainter(self)
@@ -179,22 +179,28 @@ class Draw(QWidget):
         # end draw
         qp.end()
 
+    # set Delaunay triangulation
     def setDT(self, dt: list[Edge]):
         self.__dt = dt
 
+    # set contour lines
     def setContours(self, contours: list[Edge], emph_contours: list[Edge]):
         self.__contours = contours
         self.__emph_contours = emph_contours
 
+    # set triangles
     def setTriangles(self, dtm: list[Triangle]):
         self.__triangles = dtm
 
+    # return list of points
     def getPoints(self):
         return self.__points
 
+    # return Delaunay triangulation
     def getDT(self):
         return self.__dt
 
+    # clear all results and points
     def clearAll(self):
         self.__points: list[QPoint3DF] = []
         self.__dt: list[Edge] = []
@@ -203,6 +209,7 @@ class Draw(QWidget):
         self.__triangles: list[Triangle] = []
         self.repaint()
 
+    # clear results
     def clearResults(self):
         self.__dt: list[Edge] = []
         self.__contours: list[Edge] = []

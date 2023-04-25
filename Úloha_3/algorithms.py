@@ -10,6 +10,7 @@ class Algorithms:
     def __init__(self):
         pass
 
+    # compute angle between two lines
     def get2LinesAngle(self, p1: QPoint3DF, p2: QPoint3DF, p3: QPoint3DF, p4: QPoint3DF):
         # compute vectors
         ux = p2.x() - p1.x()
@@ -30,6 +31,7 @@ class Algorithms:
         # angle
         return acos(arg)
 
+    # analyze position between point and line
     def getPointLinePosition(self, p: QPoint3DF, p1: QPoint3DF, p2: QPoint3DF):
         # compute vectors
         ux = p2.x() - p1.x()
@@ -77,6 +79,7 @@ class Algorithms:
         idx_min = -1
         d_min = inf
 
+        # process all points
         for i in range(len(points)):
             # skip the same point
             if p == points[i]:
