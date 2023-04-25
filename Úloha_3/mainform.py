@@ -1,7 +1,5 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
 from draw import Draw
-from QPoint3DF import QPoint3DF
-from edge import Edge
 from algorithms import Algorithms
 
 class Ui_MainForm(object):
@@ -75,7 +73,6 @@ class Ui_MainForm(object):
         icon5.addPixmap(QtGui.QPixmap("icons/exit.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         self.actionExit.setIcon(icon5)
         self.actionExit.setObjectName("actionExit")
-
         self.actionContoursMin = QtGui.QAction(parent=MainForm)
         icon6 = QtGui.QIcon()
         icon6.addPixmap(QtGui.QPixmap("icons/settings.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
@@ -87,7 +84,6 @@ class Ui_MainForm(object):
         self.actionContoursStep = QtGui.QAction(parent=MainForm)
         self.actionContoursStep.setIcon(icon6)
         self.actionContoursStep.setObjectName("actionContoursStep")
-
         self.actionClear_results = QtGui.QAction(parent=MainForm)
         icon7 = QtGui.QIcon()
         icon7.addPixmap(QtGui.QPixmap("icons/clear.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
@@ -124,6 +120,7 @@ class Ui_MainForm(object):
         self.toolBar.addAction(self.actionExit)
 
         # connect signals to slots
+        self.actionOpen_2.triggered.connect(self.openFile)
         self.actionCreate_DT.triggered.connect(self.runDT)
         self.actionCreate_contour_lines.triggered.connect(self.runContourLines)
         self.actionAnalyse_slope.triggered.connect(self.runSlope)
@@ -165,6 +162,12 @@ class Ui_MainForm(object):
         self.actionContoursStep.setToolTip(_translate("MainForm", "Set contour lines step"))
         self.actionClear_results.setText(_translate("MainForm", "Clear results"))
         self.actionClear_all.setText(_translate("MainForm", "Clear all"))
+
+    # load points from input file
+    def openFile(self):
+        width = self.Canvas.frameSize().width()
+        height = self.Canvas.frameSize().height()
+        self.Canvas.loadData(width, height)
 
     def runDT(self):
         points = self.Canvas.getPoints()

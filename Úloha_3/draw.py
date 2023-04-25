@@ -6,6 +6,7 @@ from edge import *
 from triangle import *
 from random import *
 from math import pi
+import csv
 
 class Draw(QWidget):
 
@@ -17,6 +18,40 @@ class Draw(QWidget):
         self.__dt: list[Edge] = []
         self.__contours: list[Edge] = []
         self.__triangles: list[Triangle] = []
+
+    # load data from input file
+    def loadData(self, width, height):
+        # get path to file via Dialog window
+        filename = QFileDialog.getOpenFileName(self, "Open file", "", "*.txt")
+        path = filename[0]
+
+        # update no data property to draw hidden polygon if dialog window is closed
+        if bool(filename[0]) == False:
+            self.__points = []
+            return self.__points
+
+        # initialize lists of coordinates
+        x_list = []
+        y_list = []
+        z_list = []
+
+        # read file
+        with open(path, "r") as f:
+            for row in csv.reader(f, delimiter='\t'):
+                # extract coordinates
+                x_list.append(float(row[0]))
+                y_list.append(float(row[1]))
+                z_list.append(float(row[2]))
+
+        # get min and max x, y coordinates
+        min_max = [min(x_list), min(y_list), max(x_list), max(y_list)]
+
+        # rescale data
+        for i in range(len(x_list)):
+            x = int(((x_list[i] - min_max[0]) / (min_max[2] - min_max[0]) * width))
+            y = int((height - (y_list[i] - min_max[1]) / (min_max[3] - min_max[1]) * (height)))
+            p = QPoint3DF(x, y, z_list[i])
+            self.__points.append(p)
 
     # left mouse button click
     def mousePressEvent(self, e:QMouseEvent):
