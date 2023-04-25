@@ -17,6 +17,7 @@ class Draw(QWidget):
         self.__points: list[QPoint3DF] = []
         self.__dt: list[Edge] = []
         self.__contours: list[Edge] = []
+        self.__emph_contours: list[Edge] = []
         self.__triangles: list[Triangle] = []
 
     # load data from input file
@@ -157,16 +158,22 @@ class Draw(QWidget):
         qp.setPen(Qt.GlobalColor.green)
         qp.setBrush(Qt.GlobalColor.transparent)
 
-        # draw contour triangles
+        # draw triangles
         for e in self.__dt:
             qp.drawLine(int(e.getStart().x()), int(e.getStart().y()), int(e.getEnd().x()), int(e.getEnd().y()))
 
         # set attributes for contour lines
         qp.setPen(Qt.GlobalColor.darkRed)
-        #qp.setBrush(Qt.GlobalColor.white)
 
         # draw contour lines
         for c in self.__contours:
+            qp.drawLine(int(c.getStart().x()), int(c.getStart().y()), int(c.getEnd().x()), int(c.getEnd().y()))
+
+        # set attributes for emphasized contour lines
+        qp.setPen(QPen(Qt.GlobalColor.darkRed, 2))
+
+        # draw emphasized contour lines
+        for c in self.__emph_contours:
             qp.drawLine(int(c.getStart().x()), int(c.getStart().y()), int(c.getEnd().x()), int(c.getEnd().y()))
 
         # end draw
@@ -175,8 +182,9 @@ class Draw(QWidget):
     def setDT(self, dt: list[Edge]):
         self.__dt = dt
 
-    def setContours(self, contours: list[Edge]):
+    def setContours(self, contours: list[Edge], emph_contours: list[Edge]):
         self.__contours = contours
+        self.__emph_contours = emph_contours
 
     def setTriangles(self, dtm: list[Triangle]):
         self.__triangles = dtm
@@ -191,11 +199,13 @@ class Draw(QWidget):
         self.__points: list[QPoint3DF] = []
         self.__dt: list[Edge] = []
         self.__contours: list[Edge] = []
+        self.__emph_contours: list[Edge] = []
         self.__triangles: list[Triangle] = []
         self.repaint()
 
     def clearResults(self):
         self.__dt: list[Edge] = []
         self.__contours: list[Edge] = []
+        self.__emph_contours: list[Edge] = []
         self.__triangles: list[Triangle] = []
         self.repaint()

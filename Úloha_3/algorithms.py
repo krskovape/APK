@@ -161,6 +161,7 @@ class Algorithms:
     # create contour lines inside given interval with given step
     def createContourLines(self, dt: list[Edge], zmin: float, zmax: float, dz: float):
         contours: list[Edge] = []
+        emph_contours: list[Edge] = []
 
         # process all triangles
         for i in range(0, len(dt), 3):
@@ -185,13 +186,16 @@ class Algorithms:
                 if (dz1 == 0) and (dz2 == 0) and (dz3 == 0):
                     continue
 
-                # udělat z tohodle nebo jen vnitřku samostatnou metodu?
                 # edges 1,2 and 2,3 are intersected by plane
                 if (dz1 * dz2 <= 0) and (dz2 * dz3 <= 0):
                     # compute intersections and create contour line
                     a = self.getContourLinePoint(p1, p2, z)
                     b = self.getContourLinePoint(p2, p3, z)
                     contours.append(Edge(a, b))
+
+                    # check for emphasized contour line
+                    if z % (5*dz) == 0:
+                        emph_contours.append(Edge(a, b))
 
                 # edges 2,3 and 3,1 are intersected by plane
                 elif (dz2 * dz3 <= 0) and (dz3 * dz1 <= 0):
@@ -200,6 +204,10 @@ class Algorithms:
                     b = self.getContourLinePoint(p3, p1, z)
                     contours.append(Edge(a, b))
 
+                    # check for emphasized contour line
+                    if z % (5 * dz) == 0:
+                        emph_contours.append(Edge(a, b))
+
                 # edges 3,1 and 1,2 are intersected by plane
                 elif (dz3 * dz1 <= 0) and (dz1 * dz2 <= 0):
                     # compute intersections and create contour line
@@ -207,7 +215,11 @@ class Algorithms:
                     b = self.getContourLinePoint(p1, p2, z)
                     contours.append(Edge(a, b))
 
-        return contours
+                    # check for emphasized contour line
+                    if z % (5 * dz) == 0:
+                        emph_contours.append(Edge(a, b))
+
+        return contours, emph_contours
 
     # compute normal vector of triangle
     def getNomrVector(self, p1: QPoint3DF, p2: QPoint3DF, p3: QPoint3DF):

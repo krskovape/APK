@@ -186,9 +186,9 @@ class Ui_MainForm(object):
         # create contour lines
         a = Algorithms()
 
-        contours = a.createContourLines(dt, self.__contours_min, self.__contours_max, self.__contours_step)
+        contours, emph_contours = a.createContourLines(dt, self.__contours_min, self.__contours_max, self.__contours_step)
 
-        self.Canvas.setContours(contours)
+        self.Canvas.setContours(contours, emph_contours)
         self.Canvas.repaint()
 
     def runSlope(self):
