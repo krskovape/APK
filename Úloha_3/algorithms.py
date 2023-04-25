@@ -225,7 +225,7 @@ class Algorithms:
         return contours, emph_contours
 
     # compute normal vector of triangle
-    def getNomrVector(self, p1: QPoint3DF, p2: QPoint3DF, p3: QPoint3DF):
+    def getNormVector(self, p1: QPoint3DF, p2: QPoint3DF, p3: QPoint3DF):
         # first vector
         ux = p2.x() - p1.x()
         uy = p2.y() - p1.y()
@@ -245,7 +245,7 @@ class Algorithms:
 
     def getSlope(self, p1: QPoint3DF, p2: QPoint3DF, p3: QPoint3DF):
         #get normal vector
-        nx, ny, nz = self.getNomrVector(p1, p2, p3)
+        nx, ny, nz = self.getNormVector(p1, p2, p3)
 
         # norm
         n = sqrt(nx*nx + ny*ny + nz*nz)
@@ -256,7 +256,7 @@ class Algorithms:
     # get triangle aspect
     def getAspect(self, p1: QPoint3DF, p2: QPoint3DF, p3: QPoint3DF):
         # get normal vector
-        nx, ny, nz = self.getNomrVector(p1, p2, p3)
+        nx, ny, nz = self.getNormVector(p1, p2, p3)
 
         # return aspect
         aspect = atan2(ny, nx)
