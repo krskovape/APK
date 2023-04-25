@@ -35,53 +35,38 @@ class Draw(QWidget):
     def getAspectColor(self, aspect):
         # North
         if (aspect >= 11*pi/8) and (aspect < 13*pi/8):
-            col1= 132
-            col2 = 214
-            col3 = 0
+            return QColor(132, 214, 0)
 
         # Northeast
         elif (aspect >= 13*pi/8) and (aspect < 15*pi/8):
-            col1 = 0
-            col2 = 171
-            col3 = 68
+            return QColor(0, 171, 68)
 
         # East
         elif ((aspect >= 0) and (aspect < pi/8)) or ((aspect >= 15*pi/8) and (aspect < 2*pi)):
-            col1 = 0
-            col2 = 104
-            col3 = 192
+            return QColor(0, 104, 192)
 
         # Southeast
         elif (aspect >= pi/8) and (aspect < 3*pi/8):
-            col1 = 108
-            col2 = 0
-            col3 = 163
+            return QColor(108, 0, 163)
 
         # South
         elif (aspect >= 3*pi/8) and (aspect < 5*pi/8):
-            col1 = 202
-            col2 = 0
-            col3 = 156
+            return QColor(202, 0, 156)
 
         # Southwest
         elif (aspect >= 5*pi/8) and (aspect < 7*pi/8):
-            col1 = 255
-            col2 = 85
-            col3 = 104
+            return QColor(255, 85, 104)
 
         # West
         elif (aspect >= 7*pi/8) and (aspect < 9*pi/8):
-            col1 = 255
-            col2 = 171
-            col3 = 71
+            return QColor(255, 171, 71)
 
         # Northwest
         elif (aspect >= 9*pi/8) and (aspect < 11*pi/8):
-            col1 = 244
-            col2 = 250
-            col3 = 0
+            return QColor(244, 250, 0)
 
-        return col1, col2, col3
+        else:
+            return QColor(255, 255, 255)
 
     # draw polygon
     def paintEvent(self, e: QPaintEvent):
@@ -123,11 +108,8 @@ class Draw(QWidget):
 
             # draw aspect
             else:
-                # get aspect color
-                col1, col2, col3 = self.getAspectColor(aspect)
-
-                # create color
-                color = QColor(col1, col2, col3)
+               # get aspect color
+                color = self.getAspectColor(aspect)
                 qp.setBrush(color)
 
                 # create new polygon
