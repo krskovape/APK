@@ -53,20 +53,6 @@ class Draw(QWidget):
             p = QPoint3DF(x, y, z_list[i])
             self.__points.append(p)
 
-    # left mouse button click
-    def mousePressEvent(self, e:QMouseEvent):
-        # get cursor position
-        x = e.position().x()
-        y = e.position().y()
-        z = random() * 100
-
-        # add point to points
-        p = QPoint3DF(x,y,z)
-        self.__points.append(p)
-
-        # repaint screen
-        self.repaint()
-
     # get aspect color
     def getAspectColor(self, aspect):
         # North
