@@ -5,6 +5,12 @@ from edge import Edge
 from algorithms import Algorithms
 
 class Ui_MainForm(object):
+    # initialize parameters of contour lines
+    def __init__(self):
+        self.__contours_min = 0
+        self.__contours_max = 2000
+        self.__contours_step = 10
+
     def setupUi(self, MainForm):
         MainForm.setObjectName("MainForm")
         MainForm.resize(872, 636)
@@ -69,11 +75,19 @@ class Ui_MainForm(object):
         icon5.addPixmap(QtGui.QPixmap("icons/exit.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         self.actionExit.setIcon(icon5)
         self.actionExit.setObjectName("actionExit")
-        self.actionParameters = QtGui.QAction(parent=MainForm)
+
+        self.actionContoursMin = QtGui.QAction(parent=MainForm)
         icon6 = QtGui.QIcon()
         icon6.addPixmap(QtGui.QPixmap("icons/settings.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
-        self.actionParameters.setIcon(icon6)
-        self.actionParameters.setObjectName("actionParameters")
+        self.actionContoursMin.setIcon(icon6)
+        self.actionContoursMin.setObjectName("actionContoursMin")
+        self.actionContoursMax = QtGui.QAction(parent=MainForm)
+        self.actionContoursMax.setIcon(icon6)
+        self.actionContoursMax.setObjectName("actionContoursMax")
+        self.actionContoursStep = QtGui.QAction(parent=MainForm)
+        self.actionContoursStep.setIcon(icon6)
+        self.actionContoursStep.setObjectName("actionContoursStep")
+
         self.actionClear_results = QtGui.QAction(parent=MainForm)
         icon7 = QtGui.QIcon()
         icon7.addPixmap(QtGui.QPixmap("icons/clear.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
@@ -88,7 +102,9 @@ class Ui_MainForm(object):
         self.menuAnalysis.addAction(self.actionCreate_contour_lines)
         self.menuAnalysis.addAction(self.actionAnalyse_slope)
         self.menuAnalysis.addAction(self.actionAnalyse_aspect)
-        self.menuSettings.addAction(self.actionParameters)
+        self.menuSettings.addAction(self.actionContoursMin)
+        self.menuSettings.addAction(self.actionContoursMax)
+        self.menuSettings.addAction(self.actionContoursStep)
         self.menuView.addAction(self.actionClear_results)
         self.menuView.addAction(self.actionClear_all)
         self.menubar.addAction(self.menuFile.menuAction())
@@ -101,8 +117,6 @@ class Ui_MainForm(object):
         self.toolBar.addAction(self.actionCreate_contour_lines)
         self.toolBar.addAction(self.actionAnalyse_slope)
         self.toolBar.addAction(self.actionAnalyse_aspect)
-        self.toolBar.addSeparator()
-        self.toolBar.addAction(self.actionParameters)
         self.toolBar.addSeparator()
         self.toolBar.addAction(self.actionClear_results)
         self.toolBar.addAction(self.actionClear_all)
@@ -117,6 +131,9 @@ class Ui_MainForm(object):
         self.actionClear_all.triggered.connect(self.clearAll)
         self.actionClear_results.triggered.connect(self.clearResults)
         self.actionExit.triggered.connect(sys.exit)
+        self.actionContoursMin.triggered.connect(self.setContoursMin)
+        self.actionContoursMax.triggered.connect(self.setContoursMax)
+        self.actionContoursStep.triggered.connect(self.setContoursStep)
 
         self.retranslateUi(MainForm)
         QtCore.QMetaObject.connectSlotsByName(MainForm)
@@ -140,8 +157,12 @@ class Ui_MainForm(object):
         self.actionOpen_2.setToolTip(_translate("MainForm", "Open file"))
         self.actionExit.setText(_translate("MainForm", "Exit"))
         self.actionExit.setToolTip(_translate("MainForm", "Exit application"))
-        self.actionParameters.setText(_translate("MainForm", "Parameters"))
-        self.actionParameters.setToolTip(_translate("MainForm", "Settings parameters"))
+        self.actionContoursMin.setText(_translate("MainForm", "Contour lines min"))
+        self.actionContoursMin.setToolTip(_translate("MainForm", "Set contour lines min"))
+        self.actionContoursMax.setText(_translate("MainForm", "Contour lines max"))
+        self.actionContoursMax.setToolTip(_translate("MainForm", "Set contour lines max"))
+        self.actionContoursStep.setText(_translate("MainForm", "Contour lines step"))
+        self.actionContoursStep.setToolTip(_translate("MainForm", "Set contour lines step"))
         self.actionClear_results.setText(_translate("MainForm", "Clear results"))
         self.actionClear_all.setText(_translate("MainForm", "Clear all"))
 
@@ -156,18 +177,13 @@ class Ui_MainForm(object):
         self.Canvas.repaint()
 
     def runContourLines(self):
-        # set parameters of contour lines
-        zmin = 0
-        zmax = 1650
-        dz = 10
-
         # get DT
         dt = self.Canvas.getDT()
 
         # create contour lines
         a = Algorithms()
 
-        contours = a.createContourLines(dt, zmin, zmax, dz)
+        contours = a.createContourLines(dt, self.__contours_min, self.__contours_max, self.__contours_step)
 
         self.Canvas.setContours(contours)
         self.Canvas.repaint()
@@ -191,6 +207,24 @@ class Ui_MainForm(object):
 
         self.Canvas.setTriangles(dtm)
         self.Canvas.repaint()
+
+    # set contour lines minimum
+    def setContoursMin(self):
+        cmin, ok = QtWidgets.QInputDialog.getInt(self.Canvas, "Contour lines minimum", "Set contour lines minimum")
+        if ok:
+            self.__contours_min = cmin
+
+    # set contour lines maximum
+    def setContoursMax(self):
+        cmax, ok = QtWidgets.QInputDialog.getInt(self.Canvas, "Contour lines maximum", "Set contour lines maximum")
+        if ok:
+            self.__contours_max = cmax
+
+    # set contour lines step
+    def setContoursStep(self):
+        step, ok = QtWidgets.QInputDialog.getInt(self.Canvas, "Contour lines step", "Set contour lines step")
+        if ok:
+            self.__contours_step = step
 
     def clearAll(self):
         self.Canvas.clearAll()
