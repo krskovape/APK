@@ -173,6 +173,9 @@ class Ui_MainForm(object):
     def runDT(self):
         points = self.Canvas.getPoints()
 
+        if points == []:
+            return
+
         a = Algorithms()
 
         dt = a.createDT(points)
