@@ -119,7 +119,7 @@ class Draw(QWidget):
             # draw slope
             if aspect == -1:
                 # convert to color
-                col = 255 - int(slope * k)
+                col = int(slope * k)
 
                 # create color
                 color = QColor(col, col, col)
