@@ -62,12 +62,19 @@ class Ui_MainForm(object):
         icon5.addPixmap(QtGui.QPixmap("icons/barrier.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         self.actionBarrier.setIcon(icon5)
         self.actionBarrier.setObjectName("actionBarrier")
+        self.actionExit = QtGui.QAction(parent=MainForm)
+        icon6 = QtGui.QIcon()
+        icon6.addPixmap(QtGui.QPixmap("icons/exit.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
+        self.actionExit.setIcon(icon6)
+        self.actionExit.setObjectName("actionExit")
         self.menuElement.addAction(self.actionElement)
         self.menuElement.addAction(self.actionBarrier)
         self.menuSimplify.addAction(self.actionDisplace_1_element)
         self.menuSimplify.addSeparator()
         self.menuSimplify.addAction(self.actionClear)
         self.menuOptions.addAction(self.actionSettings)
+        self.menuOptions.addSeparator()
+        self.menuOptions.addAction(self.actionExit)
         self.menubar.addAction(self.menuElement.menuAction())
         self.menubar.addAction(self.menuSimplify.menuAction())
         self.menubar.addAction(self.menuOptions.menuAction())
@@ -79,13 +86,16 @@ class Ui_MainForm(object):
         self.toolBar.addAction(self.actionClear)
         self.toolBar.addSeparator()
         self.toolBar.addAction(self.actionSettings)
+        self.toolBar.addSeparator()
+        self.toolBar.addAction(self.actionExit)
 
         # connect signals to slots
         self.actionDisplace_1_element.triggered.connect(self.displaceClick)
         self.actionElement.triggered.connect(self.drawLineClick)
         self.actionBarrier.triggered.connect(self.drawBarrierClick)
         self.actionClear.triggered.connect(self.clearClick)
-        self.actionSettings.triggered.connect(self.runSetting)
+        self.actionSettings.triggered.connect(self.runSettings)
+        self.actionExit.triggered.connect(sys.exit)
 
         self.retranslateUi(MainForm)
         QtCore.QMetaObject.connectSlotsByName(MainForm)
@@ -104,6 +114,8 @@ class Ui_MainForm(object):
         self.actionElement.setToolTip(_translate("MainForm", "Load element"))
         self.actionBarrier.setText(_translate("MainForm", "Barrier"))
         self.actionBarrier.setToolTip(_translate("MainForm", "Load barrier"))
+        self.actionExit.setText(_translate("MainForm", "Exit"))
+        self.actionExit.setToolTip(_translate("MainForm", "Exit application"))
 
     # initialize parameters
     def __init__(self):
@@ -115,7 +127,7 @@ class Ui_MainForm(object):
         self.__iters = 500
 
     # set properties
-    def runSetting(self):
+    def runSettings(self):
         # call dialog window, set current contours properties
         dialog = InputDialog(self.__dmin, self.__alpha, self.__beta, self.__gamma, self.__lam, self.__iters)
 
