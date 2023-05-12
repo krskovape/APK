@@ -1,6 +1,7 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
 from draw import Draw
 from algorithms import Algorithms
+from settings import InputDialog
 
 
 class Ui_MainForm(object):
@@ -84,13 +85,14 @@ class Ui_MainForm(object):
         self.actionElement.triggered.connect(self.drawLineClick)
         self.actionBarrier.triggered.connect(self.drawBarrierClick)
         self.actionClear.triggered.connect(self.clearClick)
+        self.actionSettings.triggered.connect(self.runSetting)
 
         self.retranslateUi(MainForm)
         QtCore.QMetaObject.connectSlotsByName(MainForm)
 
     def retranslateUi(self, MainForm):
         _translate = QtCore.QCoreApplication.translate
-        MainForm.setWindowTitle(_translate("MainForm", "MainForm"))
+        MainForm.setWindowTitle(_translate("MainForm", "Energy splines"))
         self.menuElement.setTitle(_translate("MainForm", "Input"))
         self.menuSimplify.setTitle(_translate("MainForm", "Simplify"))
         self.menuOptions.setTitle(_translate("MainForm", "Options"))
@@ -103,6 +105,36 @@ class Ui_MainForm(object):
         self.actionBarrier.setText(_translate("MainForm", "Barrier"))
         self.actionBarrier.setToolTip(_translate("MainForm", "Load barrier"))
 
+    # initialize parameters
+    def __init__(self):
+        self.__dmin = 100
+        self.__alpha = 0.3
+        self.__beta = 1000
+        self.__gamma = 1000
+        self.__lam = 20
+        self.__iters = 500
+
+    # set properties
+    def runSetting(self):
+        # call dialog window, set current contours properties
+        dialog = InputDialog(self.__dmin, self.__alpha, self.__beta, self.__gamma, self.__lam, self.__iters)
+
+        # on signal accepted
+        if dialog.exec():
+            # get input values
+            dmin, alpha, beta, gamma, lam, iters = dialog.getInputs()
+
+            # convert input values to integer and set it as contours properties
+            self.__dmin = int(dmin)
+            self.__alpha = int(alpha)
+            self.__beta = int(beta)
+            self.__gamma = int(gamma)
+            self.__lam = int(lam)
+            self.__iters = int(iters)
+
+        else:
+            return
+
     # load points from input file
     def openFile(self):
         width = self.Canvas.frameSize().width()
@@ -114,18 +146,10 @@ class Ui_MainForm(object):
         L = self.Canvas.getL()
         B = self.Canvas.getB()
 
-        # Set parameters
-        dmin = 100
-        alpha = 0.3
-        beta = 1000
-        gamma = 1000
-        lam = 20
-        iters = 500
-
         # Run displacement
         a = Algorithms()
         d, xq, yq = a.getPointLineDistance(100, 100, 0, 100, 100, 90)
-        LD = a.minEnergySpline(L, B, alpha, beta, gamma, lam, dmin, iters)
+        LD = a.minEnergySpline(L, B, self.__alpha, self.__beta, self.__gamma, self.__lam, self.__dmin, self.__iters)
 
         # Set results
         self.Canvas.setLD(LD)
