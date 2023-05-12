@@ -8,54 +8,6 @@ class Algorithms:
     def __init__(self):
         pass
 
-    def getPointPolygonPosition(self, q, pol):
-        # počet průsečíků (k), number of vertices (n)
-        k = 0
-        n = len(pol)
-
-        # process all vertices
-        for i in range(n):
-            # reduce coordinates
-            xir = pol[i].x() - q.x()
-            yir = pol[i].y() - q.y()
-            # modulo (%n), abychom nepřekročili index, poslední bod bude zase ten první
-            xi1r = pol[(i+1)%n].x() - q.x()
-            yi1r = pol[(i+1)%n].y() - q.y()
-
-            # suitable segment - protnutý horizontálním paprskem, oba konce v jiných polorovinách nebo...
-            if yi1r > 0 and yir <= 0 or yir > 0 and yi1r <= 0:
-                # compute intersection
-                xm = (xi1r * yir - xir * yi1r) / (yi1r - yir)
-
-                # increment amount of intersections
-                if xm > 0:
-                    k += 1
-
-        # point is inside
-        if k % 2 == 1:
-            return True
-        return False
-
-    def get2LinesAngle(self, p1: QPointF, p2: QPointF, p3: QPointF, p4: QPointF):
-        # compute vectors
-        ux = p2.x() - p1.x()
-        uy = p2.y() - p1.y()
-        vx = p4.x() - p3.x()
-        vy = p4.y() - p3.y()
-
-        # dot product
-        uv = (ux * vx) + (uy * vy)
-
-        # norms
-        nu = sqrt(ux**2 + uy**2)
-        nv = sqrt(vx**2 + vy**2)
-
-        arg = uv / (nu * nv)
-        arg = max(min(arg, 1), -1)
-
-        # angle
-        return acos(arg)
-
     # compute euclidean distance between two points
     def getEuclDistance(self, x1, y1, x2, y2):
         dx = x2 - x1
