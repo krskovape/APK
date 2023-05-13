@@ -129,7 +129,7 @@ class Algorithms:
 
         return 0
 
-    def minEnergySpline(self, L: list[QPointF], B: list[QPointF], alpha: list[QPointF], beta: float, gamma: float,
+    def minEnergySpline(self, L: list[QPointF], B: list[QPointF], alpha: float, beta: float, gamma: float,
                         lam: float, dmin: float, iters):
         # minimum energy spline
         ml = len(L)
