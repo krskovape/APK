@@ -8,7 +8,7 @@ class Draw(QWidget):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        # Query point and polygon
+        # line, barrier and displaced line
         self.__add_L = True
         self.__L = []
         self.__B = []
@@ -57,70 +57,52 @@ class Draw(QWidget):
             else:
                 self.__B.append(p)
 
-    def mousePressEvent(self, e: QMouseEvent):
-        # Left mouse button click
-        x = e.position().x()
-        y = e.position().y()
-
-        # Create new point
-        p = QPointF(x, y)
-
-        # Add point to L
-        if self.__add_L:
-            self.__L.append(p)
-
-        # Add point to B
-        else:
-            self.__B.append(p)
-
-        # Repaint screen
-        self.repaint()
-
-
     def paintEvent(self, e: QPaintEvent):
 
-        # Create graphic object
+        # create graphic object
         qp = QPainter(self)
 
-        # Start draw
+        # start draw
         qp.begin(self)
 
-        # Set attributes
+        # set attributes for line
         qp.setPen(Qt.GlobalColor.black)
 
-        # Draw L
+        # draw L
         qp.drawPolyline(self.__L)
 
-        # Set attributes
+        # set attributes for barrier
         qp.setPen(Qt.GlobalColor.blue)
 
-        # Draw B
+        # draw B
         qp.drawPolyline(self.__B)
 
-        # Set attributes
+        # set attributes for displaced line
         qp.setPen(Qt.GlobalColor.red)
 
-        # Draw LD
+        # draw LD
         qp.drawPolyline(self.__LD)
 
-        # End draw
+        # end draw
         qp.end()
 
+    # return line
     def getL(self):
         return self.__L
 
-
+    # return barrier
     def getB(self):
         return self.__B
 
-
+    # set displaced line
     def setLD(self, LD_):
         self.__LD = LD_
 
-
+    # set source to load line or barrier
     def setSource(self, status):
         self.__add_L = status
 
+    # clear Canvas
     def clearAll(self):
         self.__L.clear()
         self.__B.clear()
