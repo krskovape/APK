@@ -137,12 +137,12 @@ class Ui_MainForm(object):
             dmin, alpha, beta, gamma, lam, iters = dialog.getInputs()
 
             # convert input values to integer and set it as energy spline properties
-            self.__dmin = int(dmin)
-            self.__alpha = int(alpha)
-            self.__beta = int(beta)
-            self.__gamma = int(gamma)
-            self.__lam = int(lam)
-            self.__iters = int(iters)
+            self.__dmin = float(dmin)
+            self.__alpha = float(alpha)
+            self.__beta = float(beta)
+            self.__gamma = float(gamma)
+            self.__lam = float(lam)
+            self.__iters = float(iters)
 
         else:
             return
