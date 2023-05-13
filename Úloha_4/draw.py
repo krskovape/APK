@@ -13,6 +13,7 @@ class Draw(QWidget):
         self.__L = []
         self.__B = []
         self.__LD = []
+        self.__min_max = []
 
     # load data from input file
     def loadData(self, width, height):
@@ -40,13 +41,14 @@ class Draw(QWidget):
                 x_list.append(float(row[0]))
                 y_list.append(float(row[1]))
 
-        # get min and max x, y coordinates
-        min_max = [min(x_list), min(y_list), max(x_list), max(y_list)]
+        # set min and max x, y coordinates
+        if self.__min_max == []:
+            self.__min_max = [min(x_list), min(y_list), max(x_list), max(y_list)]
 
         # rescale data to fit the window of application
         for i in range(len(x_list)):
-            x = int(((x_list[i] - min_max[0]) / (min_max[2] - min_max[0]) * width))
-            y = int((height - (y_list[i] - min_max[1]) / (min_max[3] - min_max[1]) * (height)))
+            x = int(((x_list[i] - self.__min_max[0]) / (self.__min_max[2] - self.__min_max[0]) * width))
+            y = int((height - (y_list[i] - self.__min_max[1]) / (self.__min_max[3] - self.__min_max[1]) * (height)))
             p = QPointF(x, y)
 
             # add point to L
