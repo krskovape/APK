@@ -128,7 +128,7 @@ class Ui_MainForm(object):
 
     # set properties
     def runSettings(self):
-        # call dialog window, set current contours properties
+        # call dialog window, set energy spline properties
         dialog = InputDialog(self.__dmin, self.__alpha, self.__beta, self.__gamma, self.__lam, self.__iters)
 
         # on signal accepted
@@ -136,7 +136,7 @@ class Ui_MainForm(object):
             # get input values
             dmin, alpha, beta, gamma, lam, iters = dialog.getInputs()
 
-            # convert input values to integer and set it as contours properties
+            # convert input values to integer and set it as energy spline properties
             self.__dmin = int(dmin)
             self.__alpha = int(alpha)
             self.__beta = int(beta)
@@ -153,34 +153,37 @@ class Ui_MainForm(object):
         height = self.Canvas.frameSize().height()
         self.Canvas.loadData(width, height)
 
+    # compute displaced line
     def displaceClick(self):
-        # Get polyline and barrier
+        # get polyline and barrier
         L = self.Canvas.getL()
         B = self.Canvas.getB()
 
-        # Run displacement
+        # run displacement
         a = Algorithms()
         d, xq, yq = a.getPointLineDistance(100, 100, 0, 100, 100, 90)
         LD = a.minEnergySpline(L, B, self.__alpha, self.__beta, self.__gamma, self.__lam, self.__dmin, self.__iters)
 
-        # Set results
+        # set results
         self.Canvas.setLD(LD)
 
-        # Repaint
+        # repaint
         self.Canvas.repaint()
 
+    # load line data
     def drawLineClick(self):
         self.Canvas.setSource(True)
         self.openFile()
 
+    # load barrier data
     def drawBarrierClick(self):
         self.Canvas.setSource(False)
         self.openFile()
 
+    # clear Canvas
     def clearClick(self):
         self.Canvas.clearAll()
         self.Canvas.repaint()
-
 
 
 if __name__ == "__main__":
