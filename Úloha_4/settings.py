@@ -28,12 +28,12 @@ class InputDialog(QDialog):
 
         # create layout
         layout = QFormLayout(self)
-        layout.addRow("Dmin", self.__dmin)
+        layout.addRow("Minimum distance", self.__dmin)
         layout.addRow("Alpha", self.__alpha)
         layout.addRow("Beta", self.__beta)
         layout.addRow("Gamma", self.__gamma)
         layout.addRow("Lambda", self.__lam)
-        layout.addRow("Iters", self.__iters)
+        layout.addRow("Number of iterations", self.__iters)
         layout.addWidget(buttonBox)
 
         # accept or reject changed parameters
