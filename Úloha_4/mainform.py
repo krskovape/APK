@@ -120,11 +120,11 @@ class Ui_MainForm(object):
     # initialize parameters
     def __init__(self):
         self.__dmin = 100
-        self.__alpha = 0.3
+        self.__alpha = 1
         self.__beta = 1000
         self.__gamma = 1000
-        self.__lam = 20
-        self.__iters = 500
+        self.__lam = 1000
+        self.__iters = 100
 
     # set properties
     def runSettings(self):
@@ -161,7 +161,6 @@ class Ui_MainForm(object):
 
         # run displacement
         a = Algorithms()
-        d, xq, yq = a.getPointLineDistance(100, 100, 0, 100, 100, 90)
         LD = a.minEnergySpline(L, B, self.__alpha, self.__beta, self.__gamma, self.__lam, self.__dmin, self.__iters)
 
         # set results
