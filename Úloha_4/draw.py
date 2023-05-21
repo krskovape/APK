@@ -45,10 +45,13 @@ class Draw(QWidget):
         if self.__min_max == []:
             self.__min_max = [min(x_list), min(y_list), max(x_list), max(y_list)]
 
+        width = width - 100
+        height = height - 100
+
         # rescale data to fit the window of application
         for i in range(len(x_list)):
-            x = int(((x_list[i] - self.__min_max[0]) / (self.__min_max[2] - self.__min_max[0]) * width))
-            y = int((height - (y_list[i] - self.__min_max[1]) / (self.__min_max[3] - self.__min_max[1]) * (height)))
+            x = int(((x_list[i] - self.__min_max[0]) / (self.__min_max[2] - self.__min_max[0]) * width)) + 50
+            y = int((height - (y_list[i] - self.__min_max[1]) / (self.__min_max[3] - self.__min_max[1]) * (height))) + 50
             p = QPointF(x, y)
 
             # add point to L
