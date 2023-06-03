@@ -112,3 +112,4 @@ class Draw(QWidget):
         self.__L.clear()
         self.__B.clear()
         self.__LD.clear()
+        self.__min_max = []
