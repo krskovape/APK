@@ -36,13 +36,14 @@ class Draw(QWidget):
 
         # read file
         with open(path, "r", encoding='utf-8-sig') as f:
-            for row in csv.reader(f, delimiter=';'):
+            for row in csv.reader(f, delimiter='\t'):
                 # extract coordinates and convert them to float
                 x_list.append(float(row[0]))
                 y_list.append(float(row[1]))
 
         # set min and max x, y coordinates
-        self.__min_max = [min(x_list), min(y_list), max(x_list), max(y_list)]
+        if self.__min_max == []:
+            self.__min_max = [min(x_list), min(y_list), max(x_list), max(y_list)]
 
         width = width - 100
         height = height - 100
@@ -50,7 +51,7 @@ class Draw(QWidget):
         # rescale data to fit the window of application
         for i in range(len(x_list)):
             x = int(((x_list[i] - self.__min_max[0]) / (self.__min_max[2] - self.__min_max[0]) * width)) + 50
-            y = int(((y_list[i] - self.__min_max[1]) / (self.__min_max[3] - self.__min_max[1]) * (height))) + 50
+            y = int((height - (y_list[i] - self.__min_max[1]) / (self.__min_max[3] - self.__min_max[1]) * (height))) + 50
             p = QPointF(x, y)
 
             # add point to L
