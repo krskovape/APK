@@ -120,11 +120,11 @@ class Ui_MainForm(object):
     # initialize parameters
     def __init__(self):
         self.__dmin = 100
-        self.__alpha = 0.3
+        self.__alpha = 1
         self.__beta = 1000
-        self.__gamma = 1000
-        self.__lam = 20
-        self.__iters = 500
+        self.__gamma = 10
+        self.__lam = 10
+        self.__iters = 50
 
     # set properties
     def runSettings(self):
