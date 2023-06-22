@@ -2,6 +2,7 @@ from PyQt6.QtCore import *
 from PyQt6.QtGui import *
 from PyQt6.QtWidgets import *
 import csv
+from math import inf
 
 class Draw(QWidget):
 
@@ -10,10 +11,16 @@ class Draw(QWidget):
 
         # line, barrier and displaced line
         self.__add_L = True
-        self.__L = []
-        self.__B = []
-        self.__LD = []
+        self.__L = QPolygonF()
+        self.__B = QPolygonF()
+        self.__LD = QPolygonF()
         self.__min_max = []
+        self.__xmin = inf
+        self.__xmax = -inf
+        self.__ymin = inf
+        self.__ymax = -inf
+        self.__L_is_rescaled = True
+        self.__B_is_rescaled = True
 
     # load data from input file
     def loadData(self, width, height):
@@ -36,31 +43,103 @@ class Draw(QWidget):
 
         # read file
         with open(path, "r", encoding='utf-8-sig') as f:
-            for row in csv.reader(f, delimiter='\t'):
+            for row in csv.reader(f, delimiter=';'):
                 # extract coordinates and convert them to float
-                x_list.append(float(row[0]))
-                y_list.append(float(row[1]))
+                x = float(row[0])
+                y = float(row[1])
+                p = QPointF(x, y)
+                self.findMinMax(p)
 
-        # set min and max x, y coordinates
-        if self.__min_max == []:
-            self.__min_max = [min(x_list), min(y_list), max(x_list), max(y_list)]
+                # add point to L
+                if self.__add_L:
+                    self.__L.append(p)
+                    self.__L_is_rescaled = False
 
-        width = width - 100
-        height = height - 100
+                # add point to B
+                else:
+                    self.__B.append(p)
+                    self.__B_is_rescaled = False
 
-        # rescale data to fit the window of application
-        for i in range(len(x_list)):
-            x = int(((x_list[i] - self.__min_max[0]) / (self.__min_max[2] - self.__min_max[0]) * width)) + 50
-            y = int((height - (y_list[i] - self.__min_max[1]) / (self.__min_max[3] - self.__min_max[1]) * (height))) + 50
-            p = QPointF(x, y)
+        self.resizeCanvas(height, width)
+        self.repaint()
 
-            # add point to L
-            if self.__add_L:
-                self.__L.append(p)
+    # adjusts minimum and maximum coordinates of bounding box
+    def findMinMax(self, p: QPointF):
+        if p.x() < self.__xmin:
+            self.__xmin = p.x()
+        if p.y() < self.__ymin:
+            self.__ymin = p.y()
+        if p.x() > self.__xmax:
+            self.__xmax = p.x()
+        if p.y() > self.__ymax:
+            self.__ymax = p.y()
 
-            # add point to B
+    def resizeCanvas(self, height, width):
+        """Resizes and centers input data to fit to display."""
+        # Constant for window padding
+        C = 100
+        canvas_height = height - C
+        canvas_width = width - C
+
+        # Swap xmin and xmax according to Krovak
+        xmin = self.__xmax
+        xmax = self.__xmin
+
+        if not self.__L_is_rescaled:
+            if (self.__ymax - self.__ymin) / canvas_height > (self.__xmax - self.__xmin) / canvas_width:
+                for point in self.__L:
+                    # new_x = int((point.x() - self.__xmin) * canvas_height / (self.__xmax - self.__xmin)) + C
+                    # new_y = int((point.y() - self.__ymin) * canvas_height / (self.__ymax - self.__ymin)) + C / 2
+                    new_x = int((point.x() - xmin) * canvas_height / (xmax - xmin)) + C
+                    new_y = int((point.y() - self.__ymin) * canvas_height / (self.__ymax - self.__ymin)) + C / 2
+
+                    # new_x = int(((point.x() - self.__xmin) / (self.__xmax - self.__xmin) * canvas_width)) + C / 2
+                    # new_y = int((canvas_height - (point.y() - self.__ymin) / (self.__ymax - self.__ymin) * (
+                    #     canvas_height))) + C / 2
+
+                    # Reposition coordinates accordingly
+                    point.setX(new_x)
+                    point.setY(new_y)
+                self.__L_is_rescaled = True
             else:
-                self.__B.append(p)
+                for point in self.__L:
+                    # new_x = int((point.x() - self.__xmin) * canvas_height / (self.__xmax - self.__xmin)) + C
+                    # new_y = int((point.y() - self.__ymin) * canvas_height / (self.__ymax - self.__ymin)) + C / 2
+                    new_x = int((point.x() - xmin) * canvas_height / (xmax - xmin)) + C
+                    new_y = int((point.y() - self.__ymin) * canvas_height / (self.__ymax - self.__ymin)) + C / 2
+
+                    # new_x = int(((point.x() - self.__xmin) / (self.__xmax - self.__xmin) * canvas_width)) + C / 2
+                    # new_y = int((canvas_height - (point.y() - self.__ymin) / (self.__ymax - self.__ymin) * (
+                    #     canvas_height))) + C / 2
+
+                    # Reposition coordinates accordingly
+                    point.setX(new_x)
+                    point.setY(new_y)
+                self.__L_is_rescaled = True
+
+        if not self.__B_is_rescaled:
+            if (self.__ymax - self.__ymin) / canvas_height > (self.__xmax - self.__xmin) / canvas_width:
+                for point in self.__B:
+                    # new_x = int((point.x() - self.__xmin) * canvas_height / (self.__xmax - self.__xmin)) + C
+                    # new_y = int((point.y() - self.__ymin) * canvas_height / (self.__ymax - self.__ymin)) + C / 2
+                    new_x = int((point.x() - xmin) * canvas_height / (xmax - xmin)) + C
+                    new_y = int((point.y() - self.__ymin) * canvas_height / (self.__ymax - self.__ymin)) + C / 2
+
+                    # Reposition coordinates accordingly
+                    point.setX(new_x)
+                    point.setY(new_y)
+                self.__B_is_rescaled = True
+            else:
+                for point in self.__B:
+                    # new_x = int((point.x() - self.__xmin) * canvas_width / (self.__xmax - self.__xmin)) + C
+                    # new_y = int((point.y() - self.__ymin) * canvas_width / (self.__ymax - self.__ymin)) + C / 2
+                    new_x = int((point.x() - xmin) * canvas_width / (xmax - xmin)) + C
+                    new_y = int((point.y() - self.__ymin) * canvas_width / (self.__ymax - self.__ymin)) + C / 2
+
+                    # Reposition coordinates accordingly
+                    point.setX(new_x)
+                    point.setY(new_y)
+                self.__B_is_rescaled = True
 
     def paintEvent(self, e: QPaintEvent):
 
@@ -113,3 +192,7 @@ class Draw(QWidget):
         self.__B.clear()
         self.__LD.clear()
         self.__min_max = []
+        self.__xmin = inf
+        self.__xmax = -inf
+        self.__ymin = inf
+        self.__ymax = -inf
