@@ -151,6 +151,7 @@ class Ui_MainForm(object):
     def openFile(self):
         width = self.Canvas.frameSize().width()
         height = self.Canvas.frameSize().height()
+
         self.Canvas.loadData(width, height)
 
     # compute displaced line
